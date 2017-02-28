@@ -2,20 +2,31 @@ echo "(>^.^<)"
 
 " ###### VIM SETTINGS #####
 
-set nocompatible       " Disables Vi comaptibility (much better!). Must be first, because it changes other options as a side effect.
+set nocompatible          " Disables Vi comaptibility (much better!). Must be first, because it changes other options as a side effect.
 
 set hidden             " hides buffers instead of closing them when. This means that you can have unwritten changes to a file and open a new file using :e, without being forced to write or undo your changes first.
 set history=1000       " remember more commands and search history
 set undolevels=1000    " use many muchos levels of undo
 
-set number             " always show line numbers
+set ruler
+set number
 set relativenumber
 set numberwidth=2
+set t_Co=256              " enable 256-color mode.
+syntax enable
+colorscheme desert
+set laststatus=2          " last window always has a statusline
+set nohlsearch            " Don't continue to highlight searched phrases.
+set incsearch             " But do highlight as you type your search.
 
+filetype indent on        " activates indenting for files <-- ?
 set autoindent         " alwayis set autoindenting on
-set tabstop=4          " quantity of spaces when tabbing
+set tabstop=4          " tab spacing
+set softtabstop=4      " unify
 set shiftwidth=4       " number of spaces to use for indenting with '<' and '>' and autoindenting
+set shiftwidth=4       " indent/outdent by 4 columns
 set shiftround         " use multiple of shiftwidth when indenting with '<' and '>'
+set expandtab          " use spaces instead of tab
 
 set smarttab           " insert tabs on the start of a line according to shiftwidth, not tabstop
 

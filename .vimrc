@@ -14,7 +14,7 @@ set relativenumber
 set numberwidth=2
 set t_Co=256              " enable 256-color mode.
 syntax enable
-colorscheme desert
+colorscheme murphy
 set laststatus=2          " last window always has a statusline
 set nohlsearch            " Don't continue to highlight searched phrases.
 set incsearch             " But do highlight as you type your search.

@@ -1,12 +1,34 @@
 echo "(>^.^<)"
 
-" ###### VIM SETTINGS #####
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   Filename: .vimrc                                                         "
+" Maintainer: Dima Midnight <imagnum.satellite@gmail.com>               "
+"        URL: http://github.com/mike-midnight/.dotfiles                     "
+"                                                                            "
+"                                                                            "
+" Sections:                                                                  "
+"   01. General ................. General Vim behavior                       "
+"   02. Events .................. General autocmd events                     "
+"   03. Theme/Colors ............ Colors, fonts, etc.                        "
+"   04. Vim UI .................. User interface behavior                    "
+"   05. Text Formatting/Layout .. Text, tab, indentation related             "
+"   06. Custom Commands ......... Any custom command aliases                 "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" ##### General #####
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 01. General                                                                "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 set nocompatible                      " Disables Vi comaptibility (much better!). Must be first, because it changes other options as a side effect.
 set hidden                            " hides buffers instead of closing them when. This means thatyou can have unwritten changes to a file and open a new file using :e, without being forced to write or undo your changes first.
 set history=1000                      " remember more commands and search history
 set undolevels=1000                   " use many muchos levels of undo
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 02. Events                                                                 "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" ----------------------------------------------------------------------------
 
 " ##### Visual #####
 set ruler                             " Show the line and column number of the cursor position
@@ -15,7 +37,7 @@ set relativenumber
 set numberwidth=2
 set t_Co=256                         " enable 256-color mode.
 syntax enable
-colorscheme murphy
+colorscheme default
 set laststatus=2                     " last window always has a statusline
 set nohlsearch                       " Don't continue to highlight searched phrases.
 set incsearch                        " But do highlight as you type your search.
@@ -52,10 +74,28 @@ match WhiteSpaceMol / /
 
 noremap - ddp
 noremap _ ddkP
+inoremap jk <Esc>
+inoremap <c-u> <Esc>viwU<Esc>
+nnoremap <c-u> viwU
 
-inoremap jk <Esc>             " jj as <Esc> replacent
-inoremap <c-u> <Esc>viwU<Esc> " Uppercase word from instert moden
-nnoremap <c-u> viwU           " Uppercase word from instert moden
+" "edit my vimrc file"
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+" "source my vimrc file"
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
+" Abbreviations
+iabbrev f function
+iabbrev fuction function
+iabbrev tehn then
+iabbrev improt import
+
+
+" learning
 noremap <leader>d dd
+
+
+" "TODO"
+" 1. wrapper for word
+" 2. multiline insert and edit
+" 3. multiline identation
 

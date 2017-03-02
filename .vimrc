@@ -98,4 +98,11 @@ noremap <leader>d dd
 " 1. wrapper for word
 " 2. multiline insert and edit
 " 3. multiline identation
+" 4 Comment hotkey
+
+" 5 Const abbr
+" 6 Switch class prototype
+" 7 Return
+" 8 Extends component
+" 9 Import export default 
 

@@ -37,4 +37,8 @@ for file in $files; do
                     ln -s $dir/$file ~/$file
                 done
 
+# backup and symlink ssh configs
+mv ../.ssh/config ../.dotfiles_old
+ln -s .ssh/config ../.ssh/config
+
 echo "Operation completed."

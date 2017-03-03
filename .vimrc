@@ -2,17 +2,17 @@ echo "(>^.^<)"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Filename: .vimrc                                                         "
-" Maintainer: Dima Midnight <imagnum.satellite@gmail.com>               "
-"        URL: http://github.com/mike-midnight/.dotfiles                     "
+" Maintainer: Dima Midnight <imagnum.satellite@gmail.com>                    "
+"        URL: http://github.com/mike-midnight/.dotfiles                      "
 "                                                                            "
 "                                                                            "
 " Sections:                                                                  "
 "   01. General ................. General Vim behavior                       "
 "   02. Events .................. General autocmd events                     "
-"   03. Theme/Colors ............ Colors, fonts, etc.                        "
-"   04. Vim UI .................. User interface behavior                    "
-"   05. Text Formatting/Layout .. Text, tab, indentation related             "
-"   06. Custom Commands ......... Any custom command aliases                 "
+"   03. UI ...................... Colors, fonts, etc.                        "
+"   04. Text Formatting/Layout .. Text, tab, indentation related             "
+"   05. Mappings ................ Vim mappings section                       "
+"   06. Abbreviations ........... Custom abbreviation shortstands            "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -28,21 +28,27 @@ set undolevels=1000                   " use many muchos levels of undo
 " 02. Events                                                                 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" ----------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 03. UI                                                                     "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" ##### Visual #####
 set ruler                             " Show the line and column number of the cursor position
 set number
 set relativenumber
 set numberwidth=2
-set t_Co=256                         " enable 256-color mode.
-syntax enable
-colorscheme default
+
 set laststatus=2                     " last window always has a statusline
 set nohlsearch                       " Don't continue to highlight searched phrases.
 set incsearch                        " But do highlight as you type your search.
 
-" ###### Formatting ######
+syntax enable
+colorscheme default
+set t_Co=256                         " enable 256-color mode.
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 04. Text Formatting/Layout                                             "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 filetype indent on                   " activates indenting for files <-- ?
 set autoindent                       " alwayis set autoindenting on
 set tabstop=4                        " tab spacing
@@ -62,47 +68,76 @@ highlight ColorColumn ctermbg=magenta
 set showmatch                        " set show matching parenthesis
 set matchtime=5                      " Tenths of a second to show the matching paren, when 'showmatch' is set
 
+" TODO investigate this block
+"--------------------------
 set list
 set listchars=space:·
 highlight WhiteSpaceBol guifg=blue
 highlight WhiteSpaceMol guifg=white
 match WhiteSpaceMol / /
 2match WhiteSpaceBol /^ \+/
+"--------------------------
 
-:let mapleader = "\\"
-:let maplocalleader = "-"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 05. Mappings                                                               "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let mapleader = "\\"
+let maplocalleader = "-"
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
 noremap - ddp
 noremap _ ddkP
+nnoremap + O<Esc>
+nnoremap = o<Esc>k
+
 inoremap jk <Esc>
 inoremap <c-u> <Esc>viwU<Esc>
 nnoremap <c-u> viwU
 
-" "edit my vimrc file"
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-" "source my vimrc file"
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 
-" Abbreviations
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 06. Abbreviations                                                          "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+iabbrev conts const
+iabbrev cotns const
 iabbrev f function
 iabbrev fuction function
-iabbrev tehn then
+iabbrev swtich switch
+iabbrev swithc switch
+iabbrev swithc switch
+iabbrev r return
+iabbrev retrun return
+
 iabbrev improt import
+iabbrev impotr import
+iabbrev exprot export
+iabbrev exprtr export
+iabbrev ed export deafult
+
+iabbrev tehn then
+iabbrev calls class
+iabbrev claas class
+iabbrev extneds extends
+
+iabbrev extedns extends
+iabbrev extedns extends
+iabbrev Componetn Component
+
+iabbrev @@ imagnum.satellite@gmail.com
 
 
 " learning
-noremap <leader>d dd
-
 
 " "TODO"
 " 1. wrapper for word
 " 2. multiline insert and edit
 " 3. multiline identation
 " 4 Comment hotkey
+" 5 Investigate :soruce saving problem inside .vimrc
 
-" 5 Const abbr
-" 6 Switch class prototype
-" 7 Return
-" 8 Extends component
-" 9 Import export default 
 

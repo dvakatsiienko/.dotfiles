@@ -32,6 +32,9 @@ set undolevels=1000                   " use many muchos levels of undo
 " 03. UI                                                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+set fullscreen                        " MacVim automatic fullscreen mode on file open
+set fuopt+=maxhorz                    " Grow to maximum horizontal size on entering fullscreen mode
+
 set ruler                             " Show the line and column number of the cursor position
 set number
 set relativenumber
@@ -40,6 +43,7 @@ set numberwidth=2
 set laststatus=2                     " last window always has a statusline
 set nohlsearch                       " Don't continue to highlight searched phrases.
 set incsearch                        " But do highlight as you type your search.
+
 
 syntax enable
 colorscheme default
@@ -50,6 +54,7 @@ set t_Co=256                         " enable 256-color mode.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 filetype indent on                   " activates indenting for files <-- ?
+set backspace=indent,eol,start
 set autoindent                       " alwayis set autoindenting on
 set tabstop=4                        " tab spacing
 set softtabstop=4                    " unify
@@ -68,29 +73,42 @@ highlight ColorColumn ctermbg=magenta
 set showmatch                        " set show matching parenthesis
 set matchtime=5                      " Tenths of a second to show the matching paren, when 'showmatch' is set
 
-" TODO investigate this block
-"--------------------------
-set list
-set listchars=space:·
-highlight WhiteSpaceBol guifg=blue
-highlight WhiteSpaceMol guifg=white
-match WhiteSpaceMol / /
-2match WhiteSpaceBol /^ \+/
-"--------------------------
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 05. Mappings                                                               "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+inoremap <esc> <nop>
+
+
+" insert mode arrows ABCD fixj
+if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
+      inoremap <silent> <C-[>OC <RIGHT>
+  endif
+
+inoremap  <up>     <nop>
+inoremap  <right>  <nop>
+inoremap  <down>   <nop>
+inoremap  <left>   <nop>
+noremap   <up>     <nop>
+noremap   <right>  <nop>
+noremap   <down>   <nop>
+noremap   <left>   <nop>
+
 let mapleader = "\\"
-let maplocalleader = "-"
+let maplocalleader = "|"
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+inoremap <up> <nop>
+inoremap <right> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 noremap - ddp
 noremap _ ddkP
 nnoremap + O<Esc>
 nnoremap = o<Esc>k
+nnoremap 9 kdd
+nnoremap 8 jddk
 
 inoremap jk <Esc>
 inoremap <c-u> <Esc>viwU<Esc>
@@ -99,10 +117,17 @@ nnoremap <c-u> viwU
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 
+nnoremap H o<Esc>ddk
+nnoremap L $
+
+vnoremap q <Esc>`<i'<Esc>`>a'<Esc>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 06. Abbreviations                                                          "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+iabbrev log console.log('λ', );
+iabbrev conts const
 iabbrev conts const
 iabbrev cotns const
 iabbrev f function
@@ -139,5 +164,6 @@ iabbrev @@ imagnum.satellite@gmail.com
 " 3. multiline identation
 " 4 Comment hotkey
 " 5 Investigate :soruce saving problem inside .vimrc
-
+" 6 investigate inserting strange symbols while pressing arrows in insert mode
+" 7 dot-like empty spaces before start of line
 

@@ -1,9 +1,9 @@
 [user]
-    name = d.vakatsiienko
+    name  = d.vakatsiienko
     email = imagnum.satellite@gmail.com
 
 [alias]
-    q = "add . && git commit -m 'quck fix' && git push"
+    q = ! git commit -a -m \"quick fix\" && git push
     lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
     lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
     lg = !"git lg1"
@@ -12,13 +12,22 @@
     ca = commit -a
     cm = commit -m
     cam = commit -a -m
+    sl = stash list
     ss = stash save
     sp = stash pop
     a = add
     ch = checkout
     chb = checkout -b
-    b = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
-    ba = branch -a
+    br = branch
+    bra = branch -a
     la = "!git config -l | grep alias | cut -c 7-"
     p = push
+    cl = clone
+    rau = remote add --set--upstream
+    r = reset
+    r1 = reset HEAD^
+    r2 = reset HEAD^^
+    rh = reset --hard
+    rh1 = reset HEAD^ --hard
+    rh2 = reset HEAD^^ --hard
 

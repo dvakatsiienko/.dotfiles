@@ -1,86 +1,92 @@
 echo "(>^.^<)"
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   Filename: .vimrc                                                         "
-" Maintainer: Dima Midnight <imagnum.satellite@gmail.com>                    "
-"        URL: http://github.com/mike-midnight/.dotfiles                      "
-"                                                                            "
-"                                                                            "
-" Sections:                                                                  "
-"   01. General ................. General Vim behavior                       "
-"   02. Events .................. General autocmd events                     "
-"   03. UI ...................... Colors, fonts, etc.                        "
-"   04. Text Formatting/Layout .. Text, tab, indentation related             "
-"   05. Mappings ................ Vim mappings section                       "
-"   06. Abbreviations ........... Custom abbreviation shortstands            "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   Filename: .vimrc                                                                              "
+" Maintainer: Dima Midnight <imagnum.satellite@gmail.com>                                         "
+"        URL: http://github.com/mike-midnight/.dotfiles                                           "
+"                                                                                                 "
+"                                                                                                 "
+" Sections:                                                                                       "
+"   01. General ................. General Vim behavior                                            "
+"   02. Autocommands .............Autocmd events                                                  "
+"   03. UI ...................... Syntax, colors, fonts, etc                                      "
+"   04. Text Formatting/Layout .. Text, tabs, indentation related                                 "
+"   05. Mappings ................ Vim mappings                                                    "
+"   06. Abbreviations ........... Custom abbreviation                                             "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 01. General                                                                "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 01. General                                                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set nocompatible                      " Disables Vi comaptibility (much better!). Must be first, because it changes other options as a side effect.
-set hidden                            " hides buffers instead of closing them when. This means thatyou can have unwritten changes to a file and open a new file using :e, without being forced to write or undo your changes first.
-set history=1000                      " remember more commands and search history
-set undolevels=1000                   " use many muchos levels of undo
+set nocompatible                      " Disables Vi compatibility (much better!)
+set hidden                            " Hides buffers instead of closing them when
+set history=1000                      " Remember more commands and search history
+set undolevels=1000                   " Use many levels of undo
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 02. Events                                                                 "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 02. Events                                                                                      "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 03. UI                                                                     "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd BufNewFile * :write
+autocmd BufNewFile,BufRead *.html setlocal nowrap
+autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
+autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 03. UI                                                                                          "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set fullscreen                        " MacVim automatic fullscreen mode on file open
-set fuopt+=maxhorz                    " Grow to maximum horizontal size on entering fullscreen mode
+set fuopt+=maxhorz                    " Grow to maximum screen size on entering fullscreen mode
+
 
 set ruler                             " Show the line and column number of the cursor position
 set number
 set relativenumber
 set numberwidth=2
 
-set laststatus=2                     " last window always has a statusline
+set laststatus=2                     " Last window always has a statusline
 set nohlsearch                       " Don't continue to highlight searched phrases.
 set incsearch                        " But do highlight as you type your search.
 
 
 syntax enable
-colorscheme default
-set t_Co=256                         " enable 256-color mode.
+colorscheme murphy
+set t_Co=256                         " Enable 256-color mode.
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 04. Text Formatting/Layout                                             "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 04. Text Formatting/Layout                                                                      "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-filetype indent on                   " activates indenting for files <-- ?
+filetype indent on                   " Activates indenting for files <-- ?
 set backspace=indent,eol,start
-set autoindent                       " alwayis set autoindenting on
-set tabstop=4                        " tab spacing
-set softtabstop=4                    " unify
-set shiftwidth=4                     " number of spaces to use for indenting with '<' and '>'
-set shiftwidth=4                     " indent/outdent by 4 columns
-set shiftround                       " use multiple of shiftwidth when indenting with '<' and '>'
-set expandtab                        " use spaces instead of tab
-set smarttab                         " Insert tabs on the start of a line according to shiftwidth, not tabstop
+set autoindent                       " Alwayis set autoindenting on
+set tabstop=4                        " Tab spacing
+set softtabstop=4                    " Use spaces count by using TAB
+set shiftwidth=4                     " Number of spaces to use for indenting with '<' and '>'
+set shiftwidth=4                     " Indent/outdent by 4 columns
+set shiftround                       " Use multiple of shiftwidth when indenting with '<' and '>'
+set expandtab                        " Use spaces instead of tab
+set smarttab                         " Insert tabs on the start of a line according to shiftwidth
+                                     " not tabstop
 
 set wrap                             " Wrap lines
 set wrapmargin=100                   " Line length
 set textwidth=100
-set colorcolumn=100                  " code margin indicator + color
+set colorcolumn=100                  " Code margin indicator + color
 highlight ColorColumn ctermbg=magenta
 
-set showmatch                        " set show matching parenthesis
-set matchtime=5                      " Tenths of a second to show the matching paren, when 'showmatch' is set
+set showmatch                        " Show matching parenthesis
+set matchtime=5
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 05. Mappings                                                               "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 05. Mappings                                                                                    "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-inoremap <esc> <nop>
+inoremap <Esc> <nop>
 
-
-" insert mode arrows ABCD fixj
+" Insert mode arrows ABCD fix
 if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
       inoremap <silent> <C-[>OC <RIGHT>
   endif
@@ -95,12 +101,12 @@ noremap   <down>   <nop>
 noremap   <left>   <nop>
 
 let mapleader = "\\"
-let maplocalleader = "|"
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+let maplocalleader = ","
 inoremap <up> <nop>
 inoremap <right> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 noremap - ddp
@@ -122,9 +128,9 @@ nnoremap L $
 
 vnoremap q <Esc>`<i'<Esc>`>a'<Esc>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 06. Abbreviations                                                          "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 06. Abbreviations                                                                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 iabbrev log console.log('λ', );
 iabbrev conts const
@@ -155,15 +161,15 @@ iabbrev Componetn Component
 
 iabbrev @@ imagnum.satellite@gmail.com
 
+" •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
-" learning
 
 " "TODO"
-" 1. wrapper for word
-" 2. multiline insert and edit
-" 3. multiline identation
-" 4 Comment hotkey
-" 5 Investigate :soruce saving problem inside .vimrc
-" 6 investigate inserting strange symbols while pressing arrows in insert mode
-" 7 dot-like empty spaces before start of line
+" 1. Wrapper for word
+" 2. Multiline insert and edit
+" 3. Multiline identation
+" 4. Improve Comment hotkey in order to uncomment automatically
+" 5. Investigate :soruce saving problem inside .vimrc
+" 6. Investigate inserting strange symbols while pressing arrows in insert mode
+" 7. Dot-like empty spaces before start of line
 

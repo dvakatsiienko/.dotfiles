@@ -22,9 +22,11 @@
     ba = branch -a
     bd = branch -d
     la = "!git config -l | grep alias | cut -c 7-"
+    pl = pull
     p = push
+    pu = push --set-upstream origin
     cl = clone
-    rau = remote add --set--upstream
+    rau = remote add --set-upstream origin
     r = reset
     r1 = reset HEAD^
     r2 = reset HEAD^^

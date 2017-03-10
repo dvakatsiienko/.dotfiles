@@ -5,20 +5,29 @@
 "                                                                                                 "
 "                                                                                                 "
 " Sections:                                                                                       "
-"   01. Plugins ....................... Plugins settings                                          "
-"   02. General ....................... General Vim behavior                                      "
-"   03. Autocommands .................. Autocmd events                                            "
-"   04. UI ............................ Syntax, colors, fonts, etc                                "
-"   05. Text Formatting/Layout ........ Text, tabs, indentation related                           "
-"   06. Mappings ...................... Vim mappings                                              "
-"   07. Abbreviations ................. Custom abbreviation                                       "
+"   01. General ....................... General Vim behavior                                      "
+"   02. Plugins ....................... List of plugins for install                               "
+"   03. Plugins settings .............. Plugins settings                                          "
+"   04. Autocommands .................. Autocmd events                                            "
+"   05. UI ............................ Syntax, colors, fonts, etc                                "
+"   06. Text Formatting/Layout ........ Text, tabs, indentation related                           "
+"   07. Mappings ...................... Vim mappings                                              "
+"   08. Abbreviations ................. Custom abbreviation                                       "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
-
-"                                           λ
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 01. Plugins                                                                                     "
+" 01. General                                                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set nocompatible                      " Disables Vi compatibility (much better!)
+set encoding=utf-8
+set hidden                            " Hides buffers instead of closing them when
+set history=1000                      " Remember more commands and search history
+set undolevels=1000                   " Use many levels of undo
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 02. Plugins                                                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 filetype off
@@ -45,20 +54,11 @@ filetype plugin indent on
 "
 " see :h vundle for more details or wiki for FAQ
 
-
-
-
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 02. General                                                                                     "
+" 02. Plugins settings                                                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set nocompatible                      " Disables Vi compatibility (much better!)
-set encoding=utf-8
-set hidden                            " Hides buffers instead of closing them when
-set history=1000                      " Remember more commands and search history
-set undolevels=1000                   " Use many levels of undo
+map <C-n> :NERDTreeToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 03. Autocommands                                                                                "
@@ -82,7 +82,6 @@ augroup filetype_py
     autocmd FileType python     iabbrev  <buffer> iff if:<left>
 augroup END
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. UI                                                                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -101,8 +100,6 @@ set nohlsearch                       " Don't continue to highlight searched phra
 set incsearch                        " But do highlight as you type your search.
 set ignorecase                       " Searches are case insensitive...
 set smartcase                        " ... unless they contain at least one capital letter
-
-
 
 syntax enable
 colorscheme murphy

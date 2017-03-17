@@ -1,4 +1,4 @@
-# Get current dir (so run this script from anywhere)
+tabnew Get current dir (so run this script from anywhere)
 
 # export DOTFILES_DIR EXTRA_DIR
 # DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

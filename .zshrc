@@ -1,5 +1,4 @@
 export ZSH=/Users/mike/.oh-my-zsh
-export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -82,4 +81,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias v="open -a macvim"
 alias vv="vim"
-
+alias k="lsof -i tcp:3000"
+alias kk="kill -9"

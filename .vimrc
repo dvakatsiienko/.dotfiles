@@ -26,9 +26,11 @@ set hidden                            " Hides buffers instead of closing them wh
 set history=1000                      " Remember more commands and search history
 set undolevels=1000                   " Use many levels of undo
 set wildmenu                          " Command-line completion operates in an enhanced mode
-set wildmode=list:longest             " Completion mode taht is used for wildchar character
+set wildmode=list:longest             " Completion mode that is used for wildchar character
 set visualbell                        " Use visual bell instead of beeping
 set undofile                          " Gives the ability to undo file even after closing it
+set shell=/bin/zsh
+set ttyfast                           " Indicates a fast terminal connection, improves performance
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 02. Plugins                                                                                     "
@@ -57,7 +59,7 @@ filetype plugin indent on
 " see :h vundle for more details or wiki for FAQ
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 02. Plugins settings                                                                            "
+" 02. Plugins settings                                                                            ";
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 map <C-n> :NERDTreeToggle<CR>
@@ -65,46 +67,53 @@ map <C-n> :NERDTreeToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 03. Autocommands                                                                                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has ('autocmd')
 
-autocmd BufNewFile * :write
-autocmd BufNewFile,BufRead *.html setlocal nowrap
+	autocmd BufNewFile * :write
+	autocmd BufNewFile,BufRead *.html setlocal nowrap
 
-au FocusLost * :wa
+	autocmd FocusLost * :wa
 
-" Vimscript file settings ---------------------- {{{
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
-augroup END
-" }}}
+	" Vimscript file settings ---------------------- {{{
+	augroup filetype_vim
+		autocmd!
+		autocmd FileType vim setlocal foldmethod=marker
+	augroup END
+	" }}}
 
-augroup filetype_js
-    autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
-    autocmd FileType javascript iabbrev  <buffer> iff if ()
-    autocmd FileType javascript iabbrev  <buffer> log console.log('λ', );<left>
-    autocmd FileType javascript iabbrev  <buffer> conts const
-    autocmd FileType javascript iabbrev  <buffer> cotns const
-    autocmd FileType javascript iabbrev  <buffer> fu function
-    autocmd FileType javascript iabbrev  <buffer> fuction function
-augroup END
+	augroup filetype_js
+		autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+	augroup END
 
-augroup filetype_py
-    autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
-    autocmd FileType python     iabbrev  <buffer> iff if:<left>
-augroup END
+	augroup filetype_js
+		autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
+		autocmd FileType javascript iabbrev  <buffer> iff if ()
+		autocmd FileType javascript iabbrev  <buffer> log console.log('λ', );
+		autocmd FileType javascript iabbrev  <buffer> conts const
+		autocmd FileType javascript iabbrev  <buffer> cotns const
+		autocmd FileType javascript iabbrev  <buffer> fu function
+		autocmd FileType javascript iabbrev  <buffer> fuction function
+	augroup END
 
-augroup filetype_md
-    autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
-    autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
-augroup END
+	augroup filetype_py
+		autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
+		autocmd FileType python     iabbrev  <buffer> iff if:<left>
+	augroup END
+
+	augroup filetype_md
+		autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
+		autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+	augroup END
+
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. UI                                                                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("gui_macvim")
-    set fullscreen                   " MacVim automatic fullscreen mode on file open
-    set fuopt+=maxhorz               " Grow to maximum screen size on entering fullscreen mode
+	set fullscreen                   " MacVim automatic full screen mode on file open
+	set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
 endif
 
 set guifont=Menlo\ Regular:h13
@@ -117,16 +126,14 @@ set number
 set relativenumber
 set numberwidth=2
 set cursorline
-set ttyfast                          " Indicates a fast terminal connection, improves performance
 
-set laststatus=2                     " Last window always has a statusline
+set laststatus=2                     " Last window always has a status line
 
 set ignorecase                       " Searches are case insensitive...
 set smartcase                        " ... unless they contain at least one capital letter
 set incsearch                        " But do highlight as you type your search.
 set showmatch
-set hlsearch                         " Continue to highlight searched phrases.
-
+set nohlsearch                       " Do not continue to highlight searched phrases.
 
 set showmode                         " Show current modal editing mode
 set showcmd                          " Show command in the last line of the screen
@@ -148,7 +155,6 @@ set statusline+=\ %-4L               " Total lines
 
 " tab ball                           " Opens a new tab for each open buffer
 
-filetype indent on                   " Activates indenting for files <-- ?
 set backspace=indent,eol,start
 set autoindent                       " Alwayis set autoindenting on
 set tabstop=4                        " Tab spacing
@@ -171,13 +177,13 @@ set scrolloff=3                      " Minimal number of screen lines to keep ab
 " 06. Mappings: editing                                                                           "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let mapleader = ","
+let mapleader = "\<space>"
 let maplocalleader = "\\"
 
 " Insert mode arrows ABCD fix
 if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
-      inoremap <silent> <C-[>OC <RIGHT>
-  endif
+	inoremap <silent> <C-[>OC <RIGHT>
+endif
 
 set gdefault                         " Applies substitutions globally on lines
 
@@ -200,8 +206,6 @@ inoremap  <left> <nop>
 nnoremap  <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap  <leader>sv :source $MYVIMRC<cr>
 
-nnoremap ; :
-
 inoremap jk <Esc>
 nnoremap j gj
 nnoremap k gk
@@ -219,6 +223,9 @@ vnoremap <tab> %
 vnoremap q <Esc>`<i'<Esc>`>a'<Esc>
 vnoremap Q <Esc>`<i"<Esc>`>a"<Esc>
 
+" Adds period to visual mode
+vnoremap . :norm.<CR>
+
 onoremap p i(
 onoremap b /return<cr>
 
@@ -231,6 +238,12 @@ onoremap in{ :<c-u>normal! f{vi{<cr>
 onoremap il{ :<c-u>normal! F}vi{<cr>
 onoremap an{ :<c-u>normal! f{va{<cr>
 onoremap al{ :<c-u>normal! F}va{<cr>
+
+" Navigate over splits with hjkl
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " Strip whitespaces in current line
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
@@ -259,11 +272,8 @@ nnoremap <leader>v V`]
 " Open a split and switch to it
 nnoremap <leader>w <C-w>v<C-w>l
 
-" Navigate over splits with hjkl
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+" Put a semicolong in the end of a line
+nnoremap <leader>; mqA;<esc>`q
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 07. Mappings: layout                                                                            "
@@ -271,13 +281,19 @@ nnoremap <C-l> <C-w>l
 
 nnoremap - ddp
 nnoremap _ ddkP
-nnoremap + O<Esc>
-nnoremap = o<Esc>k
+nnoremap <leader>+ O<Esc>
+nnoremap <leader>= o<Esc>k
 nnoremap 9 kdd
 nnoremap 8 jddk
 
+" Create a ======= line below or above a cursor
 nnoremap <leader>1 yypVr=k
 nnoremap <leader>2 yyPVr=j
+
+" Autoident current line, or selection
+
+" nnoremap <leader>= =
+" vnoremap <leader>= =
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 08. Abbreviations                                                                               "
@@ -309,6 +325,33 @@ iabbrev Componetn Component
 iabbrev @@ imagnum.satellite@gmail.com
 
 " øøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøø
+
+command! -nargs=* Stab call Stab()
+function! Stab()
+	let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+	if l:tabstop > 0
+		let &l:sts = l:tabstop
+		let &l:ts = l:tabstop
+		let &l:sw = l:tabstop
+	endif
+	call SummarizeTabs()
+endfunction
+
+function! SummarizeTabs()
+	try
+		echohl ModeMsg
+		echon 'tabstop='.&l:ts
+		echon ' shiftwidth='.&l:sw
+		echon ' softtabstop='.&l:sts
+		if &l:et
+			echon ' expandtab'
+		else
+			echon ' noexpandtab'
+		endif
+	finally
+		echohl None
+	endtry
+endfunction
 
 " "TODO"
 " 1. Wrapper for word

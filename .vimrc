@@ -6,14 +6,14 @@
 "                                                                                                 "
 " Sections:                                                                                       "
 "   01. General ....................... General Vim behavior                                      "
-"   02. Plugins ....................... List of plugins for install                               "
-"   03. Plugins settings .............. Plugins settings                                          "
-"   04. Autocommands .................. Autocmd events                                            "
-"   05. UI ............................ Syntax, colors, fonts, etc                                "
-"   06. Layout ........................ Text, tabs, indentation related                           "
-"   07. Mappings: editing ............. General text editing                                      "
-"   08. Mappings: layout .............. Major layout editing: inserting/replacing lines etc...    "
-"   09. Abbreviations ................. Custom abbreviation                                       "
+"   02. UI ............................ Syntax, colors, fonts, etc                                "
+"   03. Autocommands .................. Autocmd events                                            "
+"   04. Layout ........................ Text, tabs, indentation related                           "
+"   05. Mappings: editing ............. General text editing                                      "
+"   06. Mappings: layout .............. Major layout editing: inserting/replacing lines etc...    "
+"   07. Abbreviations ................. Custom abbreviation                                       "
+"   08. Plugs ....................... List of plugins for install                               "
+"   09. Plugs settings .............. Plugins settings                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -23,7 +23,7 @@
 set nocompatible                      " Disables Vi compatibility (much better!)
 set encoding=utf-8
 set hidden                            " Hides buffers instead of closing them when
-set history=1000                      " Remember more commands and search history
+set history=200                       " Remember more commands and search history
 set undolevels=1000                   " Use many levels of undo
 set wildmenu                          " Command-line completion operates in an enhanced mode
 set wildmode=list:longest             " Completion mode that is used for wildchar character
@@ -31,41 +31,93 @@ set visualbell                        " Use visual bell instead of beeping
 set undofile                          " Gives the ability to undo file even after closing it
 set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
+set path+=**
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 02. Plugins                                                                                     "
+" 02. UI                                                                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-filetype off
+set background=dark
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Gruvbox
+let g:gruvbox_contrast_dark='dark'
+let g:gruvbox_contrast_light='soft'
 
-Plugin 'VundleVim/Vundle.vim'
+let g:gruvbox_invert_selection=0
+let g:gruvbox_italicize_comments=0
 
-Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/nerdtree'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'ascenator/L9', {'name': 'newL9'}
+" Molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 
-call vundle#end()
-filetype plugin indent on
+" Base16
+let base16colorspace=256
 
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
+if has("gui_macvim")
+	set fullscreen                   " MacVim automatic full screen mode on file open
+	set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
+endif
+
+set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete:h14
+
+syntax enable
+
+set t_Co=256                         " Enable 256-color mode.
+
+set ruler                            " Show the line and column number of the cursor position
+set number
+set relativenumber
+set numberwidth=2
+set cursorline
+
+set laststatus=2                     " Last window always has a status line
+
+set ignorecase                       " Searches are case insensitive...
+set smartcase                        " ... unless they contain at least one capital letter
+set incsearch                        " But do highlight as you type your search.
+set showmatch
+set nohlsearch                       " Do not continue to highlight searched phrases.
+
+set showmode                         " Show current modal editing mode
+set showcmd                          " Show command in the last line of the screen
+
+set statusline=\ λ
+set statusline+=\ %4F                " Path to the file
+set statusline+=\ •\                 " Separator
+set statusline+=FileType:            " Label
+set statusline+=%-4y                 " Filetype of the file
+set statusline+=%=                   " Switch to the right side
+set statusline+=\ Current:
+set statusline+=\ %-4l               " Current line
+set statusline+=\ Total:
+set statusline+=\ %-4L               " Total lines
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 02. Plugins settings                                                                            ";
+" 03. Layout                                                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-map <C-n> :NERDTreeToggle<CR>
+" tab ball                           " Opens a new tab for each open buffer
+
+set backspace=indent,eol,start
+set autoindent                       " Alwayis set autoindenting on
+set tabstop=4                        " Tab spacing
+set softtabstop=4                    " Delete spaces by one
+set shiftwidth=4
+set expandtab                        " Use spaces instead of tab
+
+set nowrap                           " No wrap lines
+set wrapmargin=100                   " Line length
+set textwidth=100
+set colorcolumn=100                  " Code margin indicator + color
+highlight ColorColumn ctermbg=magenta
+
+set showmatch                        " Show matching parenthesis
+set matchtime=5
+
+set scrolloff=3                      " Minimal number of screen lines to keep above and below cursor
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 03. Autocommands                                                                                "
+" 04. Autocommands                                                                                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has ('autocmd')
 
@@ -107,74 +159,9 @@ if has ('autocmd')
 
 endif
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 04. UI                                                                                          "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if has("gui_macvim")
-	set fullscreen                   " MacVim automatic full screen mode on file open
-	set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
-endif
-
-set guifont=Menlo\ Regular:h13
-syntax enable
-colorscheme torte
-set t_Co=256                         " Enable 256-color mode.
-
-set ruler                            " Show the line and column number of the cursor position
-set number
-set relativenumber
-set numberwidth=2
-set cursorline
-
-set laststatus=2                     " Last window always has a status line
-
-set ignorecase                       " Searches are case insensitive...
-set smartcase                        " ... unless they contain at least one capital letter
-set incsearch                        " But do highlight as you type your search.
-set showmatch
-set nohlsearch                       " Do not continue to highlight searched phrases.
-
-set showmode                         " Show current modal editing mode
-set showcmd                          " Show command in the last line of the screen
-
-set statusline=\ λ
-set statusline+=\ %4F                " Path to the file
-set statusline+=\ •\                 " Separator
-set statusline+=FileType:            " Label
-set statusline+=%-4y                 " Filetype of the file
-set statusline+=%=                   " Switch to the right side
-set statusline+=\ Current:
-set statusline+=\ %-4l               " Current line
-set statusline+=\ Total:
-set statusline+=\ %-4L               " Total lines
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 05. Layout                                                                                      "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" tab ball                           " Opens a new tab for each open buffer
-
-set backspace=indent,eol,start
-set autoindent                       " Alwayis set autoindenting on
-set tabstop=4                        " Tab spacing
-set softtabstop=4                    " Delete spaces by one
-set shiftwidth=4
-set expandtab                        " Use spaces instead of tab
-
-set nowrap                           " No wrap lines
-set wrapmargin=100                   " Line length
-set textwidth=100
-set colorcolumn=100                  " Code margin indicator + color
-highlight ColorColumn ctermbg=magenta
-
-set showmatch                        " Show matching parenthesis
-set matchtime=5
-
-set scrolloff=3                      " Minimal number of screen lines to keep above and below cursor
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 06. Mappings: editing                                                                           "
+" 05. Mappings: editing                                                                           "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let mapleader = "\<space>"
@@ -251,6 +238,7 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 " Surround word with quotes
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+nnoremap <leader>` viw<esc>a`<esc>bi`<esc>lel
 
 nnoremap <leader>v :e ~/..vimrc<CR>
 nnoremap <leader>v :tabnew ~/..vimrc<CR>
@@ -275,8 +263,11 @@ nnoremap <leader>w <C-w>v<C-w>l
 " Put a semicolong in the end of a line
 nnoremap <leader>; mqA;<esc>`q
 
+" Grep operation over current word
+" nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cWORD>")) . " ."<cr>:copen 20<cr>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 07. Mappings: layout                                                                            "
+" 06. Mappings: layout                                                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nnoremap - ddp
@@ -296,7 +287,7 @@ nnoremap <leader>2 yyPVr=j
 " vnoremap <leader>= =
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 08. Abbreviations                                                                               "
+" 07. Abbreviations                                                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 iabbrev fu function
@@ -324,40 +315,100 @@ iabbrev Componetn Component
 
 iabbrev @@ imagnum.satellite@gmail.com
 
-" øøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøø
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 08. Plugs                                                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-command! -nargs=* Stab call Stab()
-function! Stab()
-	let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
-	if l:tabstop > 0
-		let &l:sts = l:tabstop
-		let &l:ts = l:tabstop
-		let &l:sw = l:tabstop
-	endif
-	call SummarizeTabs()
-endfunction
+call plug#begin('~/.vim/plugged')
 
-function! SummarizeTabs()
-	try
-		echohl ModeMsg
-		echon 'tabstop='.&l:ts
-		echon ' shiftwidth='.&l:sw
-		echon ' softtabstop='.&l:sts
-		if &l:et
-			echon ' expandtab'
-		else
-			echon ' noexpandtab'
-		endif
-	finally
-		echohl None
-	endtry
-endfunction
+Plug 'VundleVim/Vundle.vim'
+
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" vim-markdown and it's dependency - tabular
+Plug 'godlygeek/tabular', { 'for': 'markdown'}
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
+
+" Color schemes
+Plug 'morhetz/gruvbox'
+" Plug 'tomasr/molokai'
+" Plug 'sjl/badwolf'
+" Plug 'nanotech/jellybeans.vim'
+" Plug 'altercation/vim-colors-solarized'
+" Plug 'chriskempson/base16-vim'
+
+Plug 'tpope/vim-fugitive'
+Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plug 'ascenator/L9', {'name': 'newL9'}
+
+" devicons should be loaded after all other dependent plugins
+Plug 'ryanoasis/vim-devicons'
+
+call plug#end()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 09. Plugs settings                                                                            "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <leader>pi :PlugInstall<CR>
+nnoremap <leader>pu :PlugUpdate<CR>
+nnoremap <leader>pc :PlugClean<CR>
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• NERDTree ••••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+augroup vimenter
+    
+    " open a NERDTree automatically when vim starts up if no files were specified
+    "autocmd StdinReadPre * let s:std_in=1
+    "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+    
+    " prevents NERDTree from hiding when first selecting a file
+    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+
+    " close vim if the only window left open is a NERDTree
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    
+augroup END
+
+" custom arrows
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+
+let NERDTreeShowBookmarks = 1
+let NERDTreeBookmarksFile = $HOME . '/.dotfiles/.vim/meta/NERDTree/.NERDTreeBookmarks'
+let NERDTreeShowHidden = 1
+
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• Markdown ••••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• Devicons ••••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
+let g:webdevicons_conceal_nerdtree_brackets = 1
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+colorscheme gruvbox
 
 " "TODO"
-" 1. Wrapper for word
-" 2. Multiline insert and edit
-" 3. Multiline identation
-" 4. Improve Comment hotkey in order to uncomment automatically
-" 7. Dot-like empty spaces before start of line
-" 8. investigate filetype option over vimrc file
+" 1. Transfer functions to separate files in `bundle` ans save those in dotfiles
+" 2. Wrapper for word
+" 3. Multiline insert and edit
+" 4. Multiline identation
+" 5. Improve Comment hotkey in order to uncomment automatically
+" 6. Dot-like empty spaces before start of line
+" 7. investigate filetype option over vimrc file
 

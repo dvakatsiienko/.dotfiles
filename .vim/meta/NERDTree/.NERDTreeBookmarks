@@ -1,4 +1,5 @@
 .dotfiles ~/.dotfiles
+.vim ~/.vim
 5min-UI ~/5min-UI
 dojo ~/dojo_rules
 notebook ~/notebook

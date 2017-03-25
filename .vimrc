@@ -12,8 +12,8 @@
 "   05. Mappings: editing ............. General text editing                                      "
 "   06. Mappings: layout .............. Major layout editing: inserting/replacing lines etc...    "
 "   07. Abbreviations ................. Custom abbreviation                                       "
-"   08. Plugs ....................... List of plugins for install                               "
-"   09. Plugs settings .............. Plugins settings                                          "
+"   08. Plugs ......................... List of plugins for install                               "
+"   09. Plugs settings ................ Plugins settings                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -37,22 +37,6 @@ set path+=**
 " 02. UI                                                                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set background=dark
-
-" Gruvbox
-let g:gruvbox_contrast_dark='dark'
-let g:gruvbox_contrast_light='soft'
-
-let g:gruvbox_invert_selection=0
-let g:gruvbox_italicize_comments=0
-
-" Molokai
-let g:molokai_original = 1
-let g:rehash256 = 1
-
-" Base16
-let base16colorspace=256
-
 if has("gui_macvim")
 	set fullscreen                   " MacVim automatic full screen mode on file open
 	set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
@@ -69,6 +53,8 @@ set number
 set relativenumber
 set numberwidth=2
 set cursorline
+set list listchars=tab:»·,trail:·,nbsp:·
+set nojoinspaces
 
 set laststatus=2                     " Last window always has a status line
 
@@ -87,23 +73,33 @@ set statusline+=\ •\                 " Separator
 set statusline+=FileType:            " Label
 set statusline+=%-4y                 " Filetype of the file
 set statusline+=%=                   " Switch to the right side
-set statusline+=\ Current:
-set statusline+=\ %-4l               " Current line
-set statusline+=\ Total:
-set statusline+=\ %-4L               " Total lines
+
+set statusline+=\ W:
+set statusline+=%{WordCount()}
+set statusline+=\ Ch:
+set statusline+=%{\ line2byte(line(\"$\")+1)-1\ }
+set statusline+=\ C:
+set statusline+=%-2c
+set statusline+=\ L:
+set statusline+=%-4l               " Current line
+set statusline+=\ T:
+set statusline+=%-4L               " Total lines
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 03. Layout                                                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " tab ball                           " Opens a new tab for each open buffer
+set splitright                       " Forces vsplits to be opened right
+set splitbelow                       " Forces hsplits to be opened below
 
 set backspace=indent,eol,start
 set autoindent                       " Alwayis set autoindenting on
 set tabstop=4                        " Tab spacing
 set softtabstop=4                    " Delete spaces by one
 set shiftwidth=4
-set expandtab                        " Use spaces instead of tab
+set shiftround
+set expandtab
 
 set nowrap                           " No wrap lines
 set wrapmargin=100                   " Line length
@@ -119,6 +115,7 @@ set scrolloff=3                      " Minimal number of screen lines to keep ab
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Autocommands                                                                                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 if has ('autocmd')
 
 	autocmd BufNewFile * :write
@@ -126,14 +123,12 @@ if has ('autocmd')
 
 	autocmd FocusLost * :wa
 
-	" Vimscript file settings ---------------------- {{{
 	augroup filetype_vim
 		autocmd!
 		autocmd FileType vim setlocal foldmethod=marker
 	augroup END
-	" }}}
 
-	augroup filetype_js
+	augroup filetype_yml
 		autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 	augroup END
 
@@ -155,10 +150,15 @@ if has ('autocmd')
 	augroup filetype_md
 		autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
 		autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+		autocmd FileType markdown   setlocal textwidth=100
+		autocmd FileType markdown   setlocal colorcolumn=100
+		autocmd FileType markdown   setlocal formatoptions-=l
+		autocmd FileType markdown   setlocal formatoptions+=t
+		autocmd FileType markdown   setlocal conceallevel=2
+		autocmd FileType markdown   setlocal spell spelllang=en_us
 	augroup END
 
 endif
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 05. Mappings: editing                                                                           "
@@ -172,7 +172,7 @@ if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
 	inoremap <silent> <C-[>OC <RIGHT>
 endif
 
-set gdefault                         " Applies substitutions globally on lines
+set gdefault                                  " Applies substitutions globally on lines
 
 inoremap  <Esc> <nop>
 
@@ -232,6 +232,33 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Navigate current window to according farmost side
+nnoremap <leader><C-h> <C-w>H
+nnoremap <leader><C-j> <C-w>J
+nnoremap <leader><C-k> <C-w>K
+nnoremap <leader><C-l> <C-w>L
+
+" Rotate windows right
+nnoremap <C-r> <C-w>r
+" Rotate windows left
+nnoremap <C-e> <C-w>R
+" Exchange tab with the one next to right
+nnoremap <C-x> <C-w>x
+
+" Command-key navigation
+map <D-S-]> gt
+map <D-S-[> gT
+map <D-1> 1gt
+map <D-2> 2gt
+map <D-3> 3gt
+map <D-4> 4gt
+map <D-5> 5gt
+map <D-6> 6gt
+map <D-7> 7gt
+map <D-8> 8gt
+map <D-9> 9gt
+map <D-0> :tablast<CR>
+
 " Strip whitespaces in current line
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
@@ -262,9 +289,6 @@ nnoremap <leader>w <C-w>v<C-w>l
 
 " Put a semicolong in the end of a line
 nnoremap <leader>; mqA;<esc>`q
-
-" Grep operation over current word
-" nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cWORD>")) . " ."<cr>:copen 20<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 06. Mappings: layout                                                                            "
@@ -327,14 +351,18 @@ Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
+" Syntax highlighters
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+
 " vim-markdown and it's dependency - tabular
-Plug 'godlygeek/tabular', { 'for': 'markdown'}
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 
 " Color schemes
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
 " Plug 'tomasr/molokai'
-" Plug 'sjl/badwolf'
+Plug 'sjl/badwolf'
 " Plug 'nanotech/jellybeans.vim'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'chriskempson/base16-vim'
@@ -357,20 +385,40 @@ nnoremap <leader>pu :PlugUpdate<CR>
 nnoremap <leader>pc :PlugClean<CR>
 
 "--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• Colorschemes ••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+colorscheme badwolf
+set background=dark
+
+" Gruvbox
+let g:gruvbox_contrast_dark='dark'
+let g:gruvbox_contrast_light='soft'
+
+let g:gruvbox_invert_selection=0
+let g:gruvbox_italicize_comments=0
+
+" Molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
+
+" Base16
+let base16colorspace=256
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
 " ••••••••••••••••••••••••••••••••••••••• NERDTree ••••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
+
 augroup vimenter
-    
-    " open a NERDTree automatically when vim starts up if no files were specified
-    "autocmd StdinReadPre * let s:std_in=1
-    "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-    
+
     " prevents NERDTree from hiding when first selecting a file
     autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
     " close vim if the only window left open is a NERDTree
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-    
+
 augroup END
 
 " custom arrows
@@ -383,12 +431,22 @@ let NERDTreeShowBookmarks = 1
 let NERDTreeBookmarksFile = $HOME . '/.dotfiles/.vim/meta/NERDTree/.NERDTreeBookmarks'
 let NERDTreeShowHidden = 1
 
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• Syntax highlighting •••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+let g:jsx_ext_required = 0
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
 " ••••••••••••••••••••••••••••••••••••••• Markdown ••••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
+
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_toc_autofit = 1
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -398,10 +456,9 @@ let NERDTreeShowHidden = 1
 
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'js=javascript', 'css=css']
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-
-colorscheme gruvbox
 
 " "TODO"
 " 1. Transfer functions to separate files in `bundle` ans save those in dotfiles
@@ -411,4 +468,6 @@ colorscheme gruvbox
 " 5. Improve Comment hotkey in order to uncomment automatically
 " 6. Dot-like empty spaces before start of line
 " 7. investigate filetype option over vimrc file
+" 8. word and symbol count in MD files
+" 9, also wrap WORD in qutes, and add possibility un unwrap
 

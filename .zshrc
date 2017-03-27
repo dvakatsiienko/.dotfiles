@@ -83,3 +83,5 @@ alias v="open -a macvim"
 alias vv="vim"
 alias k="lsof -i tcp:3000"
 alias kk="kill -9"
+alias ctags="`brew --prefix`/bin/ctags"
+alias git=hub

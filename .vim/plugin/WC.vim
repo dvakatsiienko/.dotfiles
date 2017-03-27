@@ -1,5 +1,3 @@
-" This function counts words quantity in current buffer
-
 function! WordCount()
    let s:old_status = v:statusmsg
    let position = getpos(".")

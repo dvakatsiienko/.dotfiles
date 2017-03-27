@@ -5,19 +5,19 @@
 # EXTRA_DIR="$HOME/.extra"
 # echo DOFTILES_DIR
 
-############################
+###################################################################################################
 # install.sh
 # This script creates symlinks from the home directory to any desired dotfiles in ~/.dotfiles
-############################
+###################################################################################################
 
 ########## Variables
 
-dir=~/.dotfiles                                              # dotfiles directory
+dir=~/.dotfiles                                                     # dotfiles directory
 
-vimPluginsDir=$dir/.vim/plugin                               # personal Vim plugins directory
-olddir=~/.dotfiles_old                                       # old dotfiles backup directory
-files=".vimrc .zshrc .hyper.js .gitconfig"                   # list of files/folders to symlink in homedir
-vimPlugins="Stab.vim grep-operator.vim word-count.vim"       # list of personal Vim plugins
+vimPluginsDir=$dir/.vim/plugin                                      # personal Vim plugins directory
+olddir=~/.dotfiles_old                                              # old dotfiles backup directory
+files=".vimrc .zshrc .ctags .hyper.js .gitconfig .gitignore_global" # list of files/folders to symlink in homedir
+vimPlugins="ResCur.vim Functional.vim Stab.vim WC.vim"              # list of personal Vim plugins
 
 ########## Action
 

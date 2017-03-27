@@ -24,7 +24,7 @@ set nocompatible                      " Disables Vi compatibility (much better!)
 set encoding=utf-8
 set hidden                            " Hides buffers instead of closing them when
 set history=200                       " Remember more commands and search history
-set undolevels=1000                   " Use many levels of undo
+set undolevels=100                    " Use many levels of undo
 set wildmenu                          " Command-line completion operates in an enhanced mode
 set wildmode=list:longest             " Completion mode that is used for wildchar character
 set visualbell                        " Use visual bell instead of beeping
@@ -33,14 +33,28 @@ set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
 set path+=**
 
+" Tell vim to remember certain things when we exit
+"  '10  :  marks will be remembered for up to 10 previously edited files
+"  "100 :  will save up to 100 lines for each register
+"  :20  :  up to 20 lines of command-line history will be remembered
+"  %    :  saves and restores the buffer list
+"  n... :  where to save the viminfo files
+set viminfo='10,\"100,:20,%,n~/.viminfo
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 02. UI                                                                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("gui_macvim")
-	set fullscreen                   " MacVim automatic full screen mode on file open
-	set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
+    set fullscreen                   " MacVim automatic full screen mode on file open
+    set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
 endif
+
+set guioptions-=r                    "remove right-hand scroll bar
+set guioptions-=L                    "remove left-hand scroll bar
+set guioptions-=T                    "remove toolbar
+set guioptions-=m                    "remove menu bar
+set guiheadroom=0                    "adjust gui behaivor to be more compact and console-like
 
 set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete:h14
 
@@ -78,7 +92,7 @@ set statusline+=\ W:
 set statusline+=%{WordCount()}
 set statusline+=\ Ch:
 set statusline+=%{\ line2byte(line(\"$\")+1)-1\ }
-set statusline+=\ C:
+set statusline+=\ Col:
 set statusline+=%-2c
 set statusline+=\ L:
 set statusline+=%-4l               " Current line
@@ -94,7 +108,7 @@ set splitright                       " Forces vsplits to be opened right
 set splitbelow                       " Forces hsplits to be opened below
 
 set backspace=indent,eol,start
-set autoindent                       " Alwayis set autoindenting on
+set autoindent                       " Always set autoindenting on
 set tabstop=4                        " Tab spacing
 set softtabstop=4                    " Delete spaces by one
 set shiftwidth=4
@@ -111,6 +125,9 @@ set showmatch                        " Show matching parenthesis
 set matchtime=5
 
 set scrolloff=3                      " Minimal number of screen lines to keep above and below cursor
+set sidescroll=1                     " Turn on smooth side scrolling
+set sidescrolloff=5                  " Minimal number of screen cols to keep left and right of cursor
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Autocommands                                                                                "
@@ -118,21 +135,35 @@ set scrolloff=3                      " Minimal number of screen lines to keep ab
 
 if has ('autocmd')
 
-	autocmd BufNewFile * :write
-	autocmd BufNewFile,BufRead *.html setlocal nowrap
+    " Automatically wrties a newly created file
+    autocmd BufNewFile * :w
 
-	autocmd FocusLost * :wa
+    " Set local nowrap to all newly created or opened existing html files
+    autocmd BufNewFile,BufRead *.html setlocal nowrap
 
-	augroup filetype_vim
-		autocmd!
-		autocmd FileType vim setlocal foldmethod=marker
-	augroup END
+    " Automatically writes all buffers on lost focus of the Vim
+    autocmd FocusLost * :wa
+
+    " Restores cursor position when opening a file
+    augroup resCur
+        autocmd!
+        autocmd BufWinEnter * call ResCur()
+    augroup END
+
+    " Vimscript file settings ---------------------- {{{
+    augroup filetype_vim
+        autocmd!
+        autocmd FileType vim setlocal foldmethod=marker
+    augroup END
+    " }}}
 
 	augroup filetype_yml
+        autocmd!
 		autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 	augroup END
 
 	augroup filetype_js
+        autocmd!
 		autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
 		autocmd FileType javascript iabbrev  <buffer> iff if ()
 		autocmd FileType javascript iabbrev  <buffer> log console.log('λ', );
@@ -143,11 +174,13 @@ if has ('autocmd')
 	augroup END
 
 	augroup filetype_py
+        autocmd!
 		autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
 		autocmd FileType python     iabbrev  <buffer> iff if:<left>
 	augroup END
 
 	augroup filetype_md
+        autocmd!
 		autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
 		autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
 		autocmd FileType markdown   setlocal textwidth=100
@@ -174,8 +207,8 @@ endif
 
 set gdefault                                  " Applies substitutions globally on lines
 
-inoremap  <Esc> <nop>
-
+" Disable ESC, and arrow keys in all modes
+inoremap  <Esc>    <nop>
 inoremap  <up>     <nop>
 inoremap  <right>  <nop>
 inoremap  <down>   <nop>
@@ -184,11 +217,10 @@ noremap   <up>     <nop>
 noremap   <right>  <nop>
 noremap   <down>   <nop>
 noremap   <left>   <nop>
-
-inoremap  <up> <nop>
-inoremap  <right> <nop>
-inoremap  <down> <nop>
-inoremap  <left> <nop>
+inoremap  <up>     <nop>
+inoremap  <right>  <nop>
+inoremap  <down>   <nop>
+inoremap  <left>   <nop>
 
 nnoremap  <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap  <leader>sv :source $MYVIMRC<cr>
@@ -201,14 +233,12 @@ nnoremap k gk
 inoremap <c-u> <Esc>viwU<Esc>
 nnoremap <c-u> viwU
 
+" Start vim search in 'very magic mode' - makes regexp search to work in natural way
 nnoremap / /\v
-nnoremap <tab> %
 
-vnoremap / /\v
-vnoremap <tab> %
-
-vnoremap q <Esc>`<i'<Esc>`>a'<Esc>
-vnoremap Q <Esc>`<i"<Esc>`>a"<Esc>
+vnoremap q' <Esc>`<i'<Esc>`>a'<Esc>
+vnoremap q" <Esc>`<i"<Esc>`>a"<Esc>
+vnoremap q` <Esc>`<i`<Esc>`>a`<Esc>
 
 " Adds period to visual mode
 vnoremap . :norm.<CR>
@@ -233,17 +263,17 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Navigate current window to according farmost side
-nnoremap <leader><C-h> <C-w>H
-nnoremap <leader><C-j> <C-w>J
-nnoremap <leader><C-k> <C-w>K
-nnoremap <leader><C-l> <C-w>L
+nnoremap <left>  <C-w>H
+nnoremap <down>  <C-w>J
+nnoremap <up>    <C-w>K
+nnoremap <right> <C-w>L
 
 " Rotate windows right
-nnoremap <C-r> <C-w>r
+nnoremap <leader>r <C-w>r
 " Rotate windows left
-nnoremap <C-e> <C-w>R
+nnoremap <leader>e <C-w>R
 " Exchange tab with the one next to right
-nnoremap <C-x> <C-w>x
+nnoremap <leader>x <C-w>x
 
 " Command-key navigation
 map <D-S-]> gt
@@ -289,6 +319,9 @@ nnoremap <leader>w <C-w>v<C-w>l
 
 " Put a semicolong in the end of a line
 nnoremap <leader>; mqA;<esc>`q
+
+"bind ;; to insert ; at the end of the line
+inoremap ;; <Esc>:startinsert!<CR>;<Esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 06. Mappings: layout                                                                            "
@@ -360,9 +393,9 @@ Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
 " Color schemes
-" Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 " Plug 'tomasr/molokai'
-Plug 'sjl/badwolf'
+" Plug 'sjl/badwolf'
 " Plug 'nanotech/jellybeans.vim'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'chriskempson/base16-vim'
@@ -374,10 +407,11 @@ Plug 'ascenator/L9', {'name': 'newL9'}
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
 
+" P.S.: call "plug#end()" utomatically executes "filetype plugin indent on" and "syntax enable"
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 09. Plugs settings                                                                            "
+" 09. Plugins settings                                                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nnoremap <leader>pi :PlugInstall<CR>
@@ -388,7 +422,7 @@ nnoremap <leader>pc :PlugClean<CR>
 " ••••••••••••••••••••••••••••••••••••••• Colorschemes ••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
-colorscheme badwolf
+colorscheme gruvbox
 set background=dark
 
 " Gruvbox
@@ -412,6 +446,7 @@ let base16colorspace=256
 "--------------------------------------------------------------------------------------------------
 
 augroup vimenter
+    autocmd!
 
     " prevents NERDTree from hiding when first selecting a file
     autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
@@ -460,14 +495,27 @@ let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=do
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
+" "TODO" check that out during refactoring vimrc:
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+" inoremap <C-U> <C-G>u<C-U>
+
+
+
 " "TODO"
 " 1. Transfer functions to separate files in `bundle` ans save those in dotfiles
 " 2. Wrapper for word
-" 3. Multiline insert and edit
+" 3. Multiline insert and EDIT
 " 4. Multiline identation
 " 5. Improve Comment hotkey in order to uncomment automatically
 " 6. Dot-like empty spaces before start of line
 " 7. investigate filetype option over vimrc file
 " 8. word and symbol count in MD files
-" 9, also wrap WORD in qutes, and add possibility un unwrap
-
+" 9. also wrap WORD in qutes, and add possibility un unwrap
+" 10. investigate and setup CTAGS
+" 
+" Investigate these below - for storing helper files in more ordered manner
+" 11. set backupdir=~/.vimbackup
+" 12. set directory=~/.vimbackup
+" 13. set undodir=~/.vimbackup

@@ -1,3 +1,5 @@
+" Utility function to change default identation size
+
 command! -nargs=* Stab call Stab()
 function! Stab()
 	let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')

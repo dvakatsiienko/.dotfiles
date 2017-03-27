@@ -34,3 +34,5 @@
     rh1 = reset HEAD^ --hard
     rh2 = reset HEAD^^ --hard
 
+[core]
+	excludesfile = /Users/mike/.gitignore_global

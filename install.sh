@@ -17,7 +17,7 @@ dir=~/.dotfiles                                                     # dotfiles d
 vimPluginsDir=$dir/.vim/plugin                                      # personal Vim plugins directory
 olddir=~/.dotfiles_old                                              # old dotfiles backup directory
 files=".vimrc .zshrc .ctags .hyper.js .gitconfig .gitignore_global" # list of files/folders to symlink in homedir
-vimPlugins="ResCur.vim Functional.vim Stab.vim WC.vim"              # list of personal Vim plugins
+vimPlugins="ResCur.vim Functional.vim Stab.vim WordCount.vim"       # list of personal Vim plugins
 
 ########## Action
 

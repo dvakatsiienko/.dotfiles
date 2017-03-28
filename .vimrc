@@ -1,6 +1,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Filename: .vimrc                                                                              "
-" Maintainer: Dima Midnight <imagnum.satellite@gmail.com>                                         "
+" Maintainer: Mike Midnight <imagnum.satellite@gmail.com>                                         "
 "        URL: http://github.com/mike-midnight/.dotfiles                                           "
 "                                                                                                 "
 "                                                                                                 "
@@ -32,6 +32,7 @@ set undofile                          " Gives the ability to undo file even afte
 set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
 set path+=**
+set updatetime=50                     " Inactivity delay before swp is written, requried forGitgutter
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
@@ -389,8 +390,8 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
 " vim-markdown and it's dependency - tabular
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+Plug 'godlygeek/tabular', {'for': 'markdown'}
 
 " Color schemes
 Plug 'morhetz/gruvbox'
@@ -401,6 +402,7 @@ Plug 'morhetz/gruvbox'
 " Plug 'chriskempson/base16-vim'
 
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'ascenator/L9', {'name': 'newL9'}
 
@@ -482,6 +484,13 @@ let g:jsx_ext_required = 0
 
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'js=javascript', 'css=css']
+
+" Mapping fix because of conflict with Gigutter. For some reason, `nnoremap` doen't work.
+map ]]c <Plug>Markdown_MoveToCurHeader
+
+" Calls vertical quickfix window to quicly navigate in a buffer with Table of Contents
+nnoremap <leader><space>n :Tocv<CR>
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -491,7 +500,6 @@ let g:vim_markdown_toc_autofit = 1
 
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 let g:webdevicons_conceal_nerdtree_brackets = 1
-let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'js=javascript', 'css=css']
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

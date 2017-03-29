@@ -1,7 +1,7 @@
 .dotfiles ~/.dotfiles
 .vim ~/.vim
+seekwa.web ~/seekwa.web
+
 5min-UI ~/5min-UI
 dojo ~/dojo_rules
 notebook ~/notebook
-vkService ~/vkService
-

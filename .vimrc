@@ -467,6 +467,7 @@ map <Leader>n <plug>NERDTreeTabsToggle<CR>
 let NERDTreeShowBookmarks = 1
 let NERDTreeBookmarksFile = $HOME . '/.dotfiles/.vim/meta/NERDTree/.NERDTreeBookmarks'
 let NERDTreeShowHidden = 1
+let g:NERDTreeWinSize = 35
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

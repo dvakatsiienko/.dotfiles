@@ -27,8 +27,8 @@ xcode-select --install
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # switch to zsh
-# chsh -s $(which zsh)
-# exec zsh
+chsh -s $(which zsh)
+exec zsh
 
 # remove .bash meta info
 rm ~/.bash_history
@@ -70,7 +70,7 @@ brew cask install alfred
 git clone git@github.com:powerline/fonts.git ~/fonts && sh ~/fonts/install.sh && rm -rf ~/fonts
 
 # Install nerd fonts
-git clone git@github.com:ryanoasis/nerd-fonts.git ~/nerd-fonts && sh ~/nerd-fonts/install.sh && rm -rf ~/nerd-fonts
+git clone git@github.com:ryanoasis/nerd-fonts.git ~/nerd-fonts && cd ~/nerd-fonts && ./install.sh &cd ~ && rm -rf ~/nerd-fonts
 
 # Turn off FaceTime sounds on mac
 sudo defaults write ~/Library/Containers/com.apple.tonelibraryd/Data/Library/Preferences/com.apple.ToneLibrary.plist ringtone "system:"

@@ -486,6 +486,7 @@ let g:jsx_ext_required = 0
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_toc_autofit = 1
 let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'js=javascript', 'css=css']
+let g:vim_markdown_autowrite = 1
 
 " Mapping fix because of conflict with Gigutter. For some reason, `nnoremap` doen't work.
 map ]]c <Plug>Markdown_MoveToCurHeader

@@ -28,7 +28,7 @@ echo "...done"
 
 # create plugin directory for personal plugins
 echo "Creating $vimPluginsDir for for personal Vim plugins."
-mkdir -p $vimPluginsDir
+mkdir -p ~/.vim/plugin
 echo "...done"
 
 # change to the dotfiles directory

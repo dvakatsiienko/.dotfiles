@@ -489,10 +489,13 @@ let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=do
 let g:vim_markdown_autowrite = 1
 
 " Mapping fix because of conflict with Gigutter. For some reason, `nnoremap` doen't work.
-map ]]c <Plug>Markdown_MoveToCurHeader
+map <leader>ch <Plug>Markdown_MoveToCurHeader
+map [] <Plug>Markdown_MoveToNextSiblingHeader
+map ][ <Plug>Markdown_MoveToPreviousSiblingHeader
 
 " Calls vertical quickfix window to quicly navigate in a buffer with Table of Contents
 nnoremap <leader><space>n :Tocv<CR>
+nnoremap <leader>tf :TableFormat<CR>
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

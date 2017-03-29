@@ -15,9 +15,11 @@
 dir=~/.dotfiles                                                     # dotfiles directory
 
 vimPluginsDir=$dir/.vim/plugin                                      # personal Vim plugins directory
+vimSpellDir=$dir/.vim/spell
 olddir=~/.dotfiles_old                                              # old dotfiles backup directory
 files=".vimrc .zshrc .ctags .hyper.js .gitconfig .gitignore_global" # list of files/folders to symlink in homedir
 vimPlugins="ResCur.vim Functional.vim Stab.vim WordCount.vim"       # list of personal Vim plugins
+spellFiles="en.utf-8.add en.utf-8.add.spl"
 
 ########## Action
 
@@ -29,6 +31,7 @@ echo "...done"
 # create plugin directory for personal plugins
 echo "Creating $vimPluginsDir for for personal Vim plugins."
 mkdir -p ~/.vim/plugin
+mkdir -p ~/.vim/spell
 echo "...done"
 
 # change to the dotfiles directory
@@ -49,6 +52,10 @@ for plugin in $vimPlugins; do
         echo "Creating syblink to $plugin in .vim/bundle directory."
             ln -s $vimPluginsDir/$plugin ~/.vim/plugin/$plugin
         done
+
+for spellFile in $spellFiles; do
+    ln -s $vimSpellDir/$spellFile ~/.vim/spell/$spellFile
+done
 
 # backup and symlink ssh configs
 mv ~/.ssh/config ~/.dotfiles_old

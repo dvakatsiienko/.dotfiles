@@ -32,7 +32,7 @@ set undofile                          " Gives the ability to undo file even afte
 set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
 set path+=**
-set updatetime=50                     " Inactivity delay before swp is written, requried forGitgutter
+set updatetime=50                      " Inactivity delay before swp is written, requried forGitgutter
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
@@ -444,6 +444,14 @@ let base16colorspace=256
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
+" •••••••••••••••••••••••••••••••••• Syntax highlighting ••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+let g:jsx_ext_required = 0
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
 " ••••••••••••••••••••••••••••••••••••••• NERDTree ••••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
@@ -472,14 +480,6 @@ let g:NERDTreeWinSize = 35
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
-" ••••••••••••••••••••••••••••••••••••••• Syntax highlighting •••••••••••••••••••••••••••••••••••••
-"--------------------------------------------------------------------------------------------------
-
-let g:jsx_ext_required = 0
-
-"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-
-"--------------------------------------------------------------------------------------------------
 " ••••••••••••••••••••••••••••••••••••••• Markdown ••••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
@@ -488,14 +488,39 @@ let g:vim_markdown_toc_autofit = 1
 let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'js=javascript', 'css=css']
 let g:vim_markdown_autowrite = 1
 
-" Mapping fix because of conflict with Gigutter. For some reason, `nnoremap` doen't work.
-map <leader>ch <Plug>Markdown_MoveToCurHeader
+" Convenient headers navigation remap. For some reason, `nnoremap` doen't work.
 map [] <Plug>Markdown_MoveToNextSiblingHeader
 map ][ <Plug>Markdown_MoveToPreviousSiblingHeader
 
 " Calls vertical quickfix window to quicly navigate in a buffer with Table of Contents
 nnoremap <leader><space>n :Tocv<CR>
 nnoremap <leader>tf :TableFormat<CR>
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• GitGutter •••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+" Threshold of changes qunatity if a file when GitGutter starts to suppress itself for performance
+let g:gitgutter_max_signs = 500
+
+" Always display signs column, no matter there are changes or not
+let g:gitgutter_sign_column_always = 1
+
+" Navigation between hungs
+nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>GitGutterPrevHunk
+
+" Hunk add, hunk revert - remapping in more intuitive mnemonic manner (instead stage, undo)
+nmap <Leader>ha <Plug>GitGutterStageHunk
+nmap <Leader>hr <Plug>GitGutterUndoHunk
+
+" A hunk text object is provided which works in visual and operator-pending modes
+omap ih <Plug>GitGutterTextObjectInnerPending
+omap ah <Plug>GitGutterTextObjectOuterPending
+xmap ih <Plug>GitGutterTextObjectInnerVisual
+xmap ah <Plug>GitGutterTextObjectOuterVisual
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

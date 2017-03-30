@@ -20,6 +20,16 @@
 # 
 # I also use KeyRemap4MacBook. I've set the repeat rates to 40 ms and the initial repeat rates to 150 ms.
 
+echo "Set a blazingly fast keyboard repeat rate, "
+defaults write NSGlobalDomain KeyRepeat -int 0.02
+
+echo "Set a shorter Delay until key repeat"
+defaults write NSGlobalDomain InitialKeyRepeat -int 12
+
+# Revert to default settings with:
+# defaults delete NSGlobalDomain KeyRepeat
+# defaults delete NSGlobalDomain InitialKeyRepeat
+
 # Command line tools
 xcode-select --install
 

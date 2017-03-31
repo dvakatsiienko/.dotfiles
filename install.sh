@@ -18,7 +18,7 @@ vimPluginsDir=$dir/.vim/plugin                                      # personal V
 vimSpellDir=$dir/.vim/spell
 olddir=~/.dotfiles_old                                              # old dotfiles backup directory
 files=".vimrc .zshrc .ctags .hyper.js .gitconfig .gitignore_global" # list of files/folders to symlink in homedir
-vimPlugins="ResCur.vim Functional.vim Stab.vim WordCount.vim"       # list of personal Vim plugins
+vimPlugins="AddSubstract.vim GlobalHunkNav.vim ResCur.vim Functional.vim Stab.vim WordCount.vim"       # list of personal Vim plugins
 spellFiles="en.utf-8.add en.utf-8.add.spl"
 
 ########## Action

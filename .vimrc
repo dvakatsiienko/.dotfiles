@@ -32,7 +32,8 @@ set undofile                          " Gives the ability to undo file even afte
 set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
 set path+=**
-set updatetime=50                      " Inactivity delay before swp is written, requried forGitgutter
+set updatetime=250                    " Inactivity delay before swp is written, requried forGitgutter
+set nrformats=hex,bin                 " Incrementing values
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
@@ -508,19 +509,27 @@ let g:gitgutter_max_signs = 500
 " Always display signs column, no matter there are changes or not
 let g:gitgutter_sign_column_always = 1
 
-" Navigation between hungs
+" Change modified and deleted line symbol
+let g:gitgutter_sign_modified_removed = '~-'
+
+" Navigation between hungs within a single buffer
 nmap ]h <Plug>GitGutterNextHunk
 nmap [h <Plug>GitGutterPrevHunk
 
+" Global navigation between hunks
+nmap <silent> ]H :call NextHunkAllBuffers()<CR>
+nmap <silent> [H :call PrevHunkAllBuffers()<CR>
+
 " Hunk add, hunk revert - remapping in more intuitive mnemonic manner (instead stage, undo)
 nmap <Leader>ha <Plug>GitGutterStageHunk
-nmap <Leader>hr <Plug>GitGutterUndoHunk
+nmap <Leader>hr <Plug>GitGutterUndoHunk 
 
 " A hunk text object is provided which works in visual and operator-pending modes
 omap ih <Plug>GitGutterTextObjectInnerPending
 omap ah <Plug>GitGutterTextObjectOuterPending
 xmap ih <Plug>GitGutterTextObjectInnerVisual
 xmap ah <Plug>GitGutterTextObjectOuterVisual
+
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

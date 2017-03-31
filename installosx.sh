@@ -71,6 +71,7 @@ sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
 brew cask install google-chrome
 brew cask install google-drive 
 brew cask install skyfonts
+brew cask install postman
 brew cask install skype
 brew cask install atom
 brew cask install webstorm

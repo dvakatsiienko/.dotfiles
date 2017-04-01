@@ -11,7 +11,9 @@
 "   04. Layout ........................ Text, tabs, indentation related                           "
 "   05. Mappings: editing ............. General text editing                                      "
 "   06. Mappings: layout .............. Major layout editing: inserting/replacing lines etc...    "
-"   07. Abbreviations ................. Custom abbreviation                                       " "   08. Plugs ......................... List of plugins for install                               " "   09. Plugs settings ................ Plugins settings                                          "
+"   07. Abbreviations ................. Custom abbreviations                                      "
+"   08. Plugs ......................... List of plugins for install                               "
+"   09. Plugs settings ................ Plugins settings                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -127,6 +129,12 @@ set matchtime=5
 set scrolloff=3                      " Minimal number of screen lines to keep above and below cursor
 set sidescroll=1                     " Turn on smooth side scrolling
 set sidescrolloff=5                  " Minimal number of screen cols to keep left and right of cursor
+
+" Vertical and horizontal vindow resizing with ALT-arrows
+nnoremap <s-left>  :vertical resize -1<CR>
+nnoremap <s-right> :vertical resize +1<CR>
+nnoremap <s-up>    :resize +1<CR>
+nnoremap <s-down>  :resize -1<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Autocommands                                                                                "
@@ -527,7 +535,6 @@ omap ah <Plug>GitGutterTextObjectOuterPending
 xmap ih <Plug>GitGutterTextObjectInnerVisual
 xmap ah <Plug>GitGutterTextObjectOuterVisual
 
-
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
@@ -538,11 +545,11 @@ let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-"
+
 " Ctags:
 " Create a 'tags' file (may need to install ctags first)
 " command! MAkeTags !ctags -R .
-"
+
 " ^] - jump to tag under curosr
 " g^] for amboguous tags
 " ^t to jump back to the tag stack
@@ -552,8 +559,6 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 " inoremap <C-U> <C-G>u<C-U>
-
-
 
 " "TODO"
 " 1. Transfer functions to separate files in `bundle` ans save those in dotfiles

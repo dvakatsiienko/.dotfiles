@@ -86,3 +86,5 @@ alias k="lsof -i tcp:3000"
 alias kk="kill -9"
 alias ctags="`brew --prefix`/bin/ctags"
 alias g=hub
+
+PATH=/opt/local/bin:$PATH

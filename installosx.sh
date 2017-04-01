@@ -28,13 +28,22 @@ brew install ctags
 
 echo 'Installing set of cask formulas'
 brew cask install google-chrome
-brew cask install google-drive 
+brew cask install google-drive
 brew cask install skyfonts
 brew cask install postman
 brew cask install skype
 brew cask install atom
 brew cask install webstorm
 brew cask install alfred
+
+echo 'Installing vim from binaries'
+sudo mkdir -p /opt/local/bin
+cd ~
+git clone https://github.com/vim/vim.git
+cd vim
+./configure --prefix=/opt/local
+make
+sudo make install
 
 echo 'Fixing Node permissions'
 sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}

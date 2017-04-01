@@ -11,9 +11,7 @@
 "   04. Layout ........................ Text, tabs, indentation related                           "
 "   05. Mappings: editing ............. General text editing                                      "
 "   06. Mappings: layout .............. Major layout editing: inserting/replacing lines etc...    "
-"   07. Abbreviations ................. Custom abbreviation                                       "
-"   08. Plugs ......................... List of plugins for install                               "
-"   09. Plugs settings ................ Plugins settings                                          "
+"   07. Abbreviations ................. Custom abbreviation                                       " "   08. Plugs ......................... List of plugins for install                               " "   09. Plugs settings ................ Plugins settings                                          "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -33,7 +31,7 @@ set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
 set path+=**
 set updatetime=250                    " Inactivity delay before swp is written, requried forGitgutter
-set nrformats=hex,bin                 " Incrementing values
+set nrformats-=octal                  " Incrementing values
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
@@ -129,7 +127,6 @@ set matchtime=5
 set scrolloff=3                      " Minimal number of screen lines to keep above and below cursor
 set sidescroll=1                     " Turn on smooth side scrolling
 set sidescrolloff=5                  " Minimal number of screen cols to keep left and right of cursor
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Autocommands                                                                                "
@@ -541,6 +538,14 @@ let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+"
+" Ctags:
+" Create a 'tags' file (may need to install ctags first)
+" command! MAkeTags !ctags -R .
+"
+" ^] - jump to tag under curosr
+" g^] for amboguous tags
+" ^t to jump back to the tag stack
 
 " "TODO" check that out during refactoring vimrc:
 

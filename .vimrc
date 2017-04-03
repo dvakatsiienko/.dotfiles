@@ -88,6 +88,8 @@ set statusline+=\ %4F                " Path to the file
 set statusline+=\ •\                 " Separator
 set statusline+=FileType:            " Label
 set statusline+=%-4y                 " Filetype of the file
+set statusline+=\ %h%m%r%{fugitive#statusline()} " Fugitive git status
+
 set statusline+=%=                   " Switch to the right side
 
 set statusline+=\ W:
@@ -243,10 +245,6 @@ nnoremap <c-u> viwU
 " Start vim search in 'very magic mode' - makes regexp search to work in natural way
 nnoremap / /\v
 
-vnoremap q' <Esc>`<i'<Esc>`>a'<Esc>
-vnoremap q" <Esc>`<i"<Esc>`>a"<Esc>
-vnoremap q` <Esc>`<i`<Esc>`>a`<Esc>
-
 " Adds period to visual mode
 vnoremap . :norm.<CR>
 
@@ -299,11 +297,6 @@ map <D-0> :tablast<CR>
 " Strip whitespaces in current line
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
-" Surround word with quotes
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-nnoremap <leader>` viw<esc>a`<esc>bi`<esc>lel
-
 nnoremap <leader>v :e ~/..vimrc<CR>
 nnoremap <leader>v :tabnew ~/..vimrc<CR>
 
@@ -345,11 +338,6 @@ nnoremap 8 jddk
 nnoremap <leader>1 yypVr=k
 nnoremap <leader>2 yyPVr=j
 
-" Autoident current line, or selection
-
-" nnoremap <leader>= =
-" vnoremap <leader>= =
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 07. Abbreviations                                                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -385,15 +373,18 @@ iabbrev @@ imagnum.satellite@gmail.com
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'VundleVim/Vundle.vim'
-
+" Navigation
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Syntax highlighters
 Plug 'pangloss/vim-javascript'
+Plug 'jelera/vim-javascript-syntax'
 Plug 'mxw/vim-jsx'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'othree/es.next.syntax.vim'
 
 " vim-markdown and it's dependency - tabular
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
@@ -407,10 +398,13 @@ Plug 'morhetz/gruvbox'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'chriskempson/base16-vim'
 
+" Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+
+" Editing and formatting
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plug 'ascenator/L9', {'name': 'newL9'}
+Plug 'tpope/vim-surround'
 
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
@@ -454,6 +448,9 @@ let base16colorspace=256
 "--------------------------------------------------------------------------------------------------
 
 let g:jsx_ext_required = 0
+
+" javascript-libraries-syntax.vim
+let g:used_javascript_libs = 'react,d3,underscore,chai,jasmine'
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -561,8 +558,6 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " inoremap <C-U> <C-G>u<C-U>
 
 " "TODO"
-" 1. Transfer functions to separate files in `bundle` ans save those in dotfiles
-" 2. Wrapper for word
 " 3. Multiline insert and EDIT
 " 4. Multiline identation
 " 5. Improve Comment hotkey in order to uncomment automatically

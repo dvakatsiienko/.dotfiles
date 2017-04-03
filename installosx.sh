@@ -1,5 +1,8 @@
 # Pre-requisite - system ssh agentsetup  with keys
 
+echo "Installing .dotfiles"
+sh ~/.dotfiles/install.sh
+
 echo 'Setting up a blazingly fast keyboard repeat rate'
 defaults write NSGlobalDomain KeyRepeat -int 1
 

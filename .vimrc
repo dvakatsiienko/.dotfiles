@@ -175,7 +175,6 @@ if has ('autocmd')
         autocmd!
 		autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
 		autocmd FileType javascript iabbrev  <buffer> iff if ()
-		autocmd FileType javascript iabbrev  <buffer> log console.log('λ', );
 		autocmd FileType javascript iabbrev  <buffer> conts const
 		autocmd FileType javascript iabbrev  <buffer> cotns const
 		autocmd FileType javascript iabbrev  <buffer> fu function
@@ -323,6 +322,11 @@ nnoremap <leader>; mqA;<esc>`q
 "bind ;; to insert ; at the end of the line
 inoremap ;; <Esc>:startinsert!<CR>;<Esc>
 
+" Console log from insert mode; Puts focus inside parentheses, after λ
+inoremap cll console.log('λ', );<Esc>==f)i
+" Console log from visual mode on next line, puts visual selection inside parentheses, after λ
+nnoremap cll yiwoconsole.log('λ', )<Esc>P
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 06. Mappings: layout                                                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -331,8 +335,6 @@ nnoremap - ddp
 nnoremap _ ddkP
 nnoremap <leader>+ O<Esc>
 nnoremap <leader>= o<Esc>k
-nnoremap 9 kdd
-nnoremap 8 jddk
 
 " Create a ======= line below or above a cursor
 nnoremap <leader>1 yypVr=k

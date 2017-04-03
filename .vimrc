@@ -166,38 +166,42 @@ if has ('autocmd')
     augroup END
     " }}}
 
-	augroup filetype_yml
+    augroup filetype_yml
         autocmd!
-		autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-	augroup END
+        autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+    augroup END
 
-	augroup filetype_js
+    augroup filetype_js
         autocmd!
-		autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
-		autocmd FileType javascript iabbrev  <buffer> iff if ()
-		autocmd FileType javascript iabbrev  <buffer> conts const
-		autocmd FileType javascript iabbrev  <buffer> cotns const
-		autocmd FileType javascript iabbrev  <buffer> fu function
-		autocmd FileType javascript iabbrev  <buffer> fuction function
-	augroup END
+        autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
+        autocmd FileType javascript iabbrev  <buffer> iff if ()
+        autocmd FileType javascript iabbrev  <buffer> conts const
+        autocmd FileType javascript iabbrev  <buffer> cotns const
+        autocmd FileType javascript iabbrev  <buffer> fu function
+        autocmd FileType javascript iabbrev  <buffer> fuction function
 
-	augroup filetype_py
-        autocmd!
-		autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
-		autocmd FileType python     iabbrev  <buffer> iff if:<left>
-	augroup END
+        autocmd FileType javascript inoremap cll console.log('λ', );<Esc>==f)i
+        autocmd FileType javascript nnoremap cll yiwoconsole.log('λ', )<Esc>P
+    augroup END
 
-	augroup filetype_md
+
+    augroup filetype_py
         autocmd!
-		autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
-		autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
-		autocmd FileType markdown   setlocal textwidth=100
-		autocmd FileType markdown   setlocal colorcolumn=100
-		autocmd FileType markdown   setlocal formatoptions-=l
-		autocmd FileType markdown   setlocal formatoptions+=t
-		autocmd FileType markdown   setlocal conceallevel=2
-		autocmd FileType markdown   setlocal spell spelllang=en_us
-	augroup END
+        autocmd FileType python     nnoremap <buffer> <localleader>c I#<esc>
+        autocmd FileType python     iabbrev  <buffer> iff if:<left>
+    augroup END
+
+    augroup filetype_md
+        autocmd!
+        autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
+        autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+        autocmd FileType markdown   setlocal textwidth=100
+        autocmd FileType markdown   setlocal colorcolumn=100
+        autocmd FileType markdown   setlocal formatoptions-=l
+        autocmd FileType markdown   setlocal formatoptions+=t
+        autocmd FileType markdown   setlocal conceallevel=2
+        autocmd FileType markdown   setlocal spell spelllang=en_us
+    augroup END
 
 endif
 
@@ -210,7 +214,7 @@ let maplocalleader = "\\"
 
 " Insert mode arrows ABCD fix
 if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
-	inoremap <silent> <C-[>OC <RIGHT>
+    inoremap <silent> <C-[>OC <RIGHT>
 endif
 
 set gdefault                                  " Applies substitutions globally on lines
@@ -322,11 +326,6 @@ nnoremap <leader>; mqA;<esc>`q
 "bind ;; to insert ; at the end of the line
 inoremap ;; <Esc>:startinsert!<CR>;<Esc>
 
-" Console log from insert mode; Puts focus inside parentheses, after λ
-inoremap cll console.log('λ', );<Esc>==f)i
-" Console log from visual mode on next line, puts visual selection inside parentheses, after λ
-nnoremap cll yiwoconsole.log('λ', )<Esc>P
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 06. Mappings: layout                                                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -335,15 +334,6 @@ nnoremap - ddp
 nnoremap _ ddkP
 nnoremap <leader>+ O<Esc>
 nnoremap <leader>= o<Esc>k
-<<<<<<< Updated upstream
-=======
-" nnoremap 9 kdd
-" nnoremap 8 jddk
->>>>>>> Stashed changes
-
-" Create a ======= line below or above a cursor
-nnoremap <leader>1 yypVr=k
-nnoremap <leader>2 yyPVr=j
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 07. Abbreviations                                                                               "
@@ -375,7 +365,7 @@ iabbrev Componetn Component
 iabbrev @@ imagnum.satellite@gmail.com
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 08. Plugs                                                                                     "
+" 08. Plugs                                                                                       "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin('~/.vim/plugged')
@@ -565,6 +555,7 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " inoremap <C-U> <C-G>u<C-U>
 
 " "TODO"
+" 1. solve vim-surround 'd' and 'c' cursor issue in MacVim
 " 3. Multiline insert and EDIT
 " 4. Multiline identation
 " 5. Improve Comment hotkey in order to uncomment automatically

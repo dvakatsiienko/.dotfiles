@@ -335,6 +335,11 @@ nnoremap - ddp
 nnoremap _ ddkP
 nnoremap <leader>+ O<Esc>
 nnoremap <leader>= o<Esc>k
+<<<<<<< Updated upstream
+=======
+" nnoremap 9 kdd
+" nnoremap 8 jddk
+>>>>>>> Stashed changes
 
 " Create a ======= line below or above a cursor
 nnoremap <leader>1 yypVr=k

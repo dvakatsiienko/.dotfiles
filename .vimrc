@@ -382,12 +382,14 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Syntax highlighters
+" Unresolved question of syntax highlighting
 Plug 'pangloss/vim-javascript'
 Plug 'jelera/vim-javascript-syntax'
 Plug 'mxw/vim-jsx'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'othree/es.next.syntax.vim'
+" Unresolved question of syntax highlighting
 
 " Linting
 Plug 'w0rp/ale'

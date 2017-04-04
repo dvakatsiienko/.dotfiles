@@ -32,7 +32,7 @@ set undofile                          " Gives the ability to undo file even afte
 set shell=/bin/zsh
 set ttyfast                           " Indicates a fast terminal connection, improves performance
 set path+=**
-set updatetime=250                    " Inactivity delay before swp is written, requried forGitgutter
+set updatetime=200                    " Inactivity delay before swp is written, requried forGitgutter
 set nrformats-=octal                  " Incrementing values
 
 " Tell vim to remember certain things when we exit
@@ -83,12 +83,15 @@ set nohlsearch                       " Do not continue to highlight searched phr
 set showmode                         " Show current modal editing mode
 set showcmd                          " Show command in the last line of the screen
 
-set statusline=\ λ
+set statusline=\ ✪
+set statusline+=\ λ
+set statusline+=\ ✪
 set statusline+=\ %4F                " Path to the file
 set statusline+=\ •\                 " Separator
 set statusline+=FileType:            " Label
 set statusline+=%-4y                 " Filetype of the file
 set statusline+=\ %h%m%r%{fugitive#statusline()} " Fugitive git status
+set statusline+=\ [%{ALEGetStatusLine()}] " Ale linting errors
 
 set statusline+=%=                   " Switch to the right side
 
@@ -383,6 +386,9 @@ Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'othree/es.next.syntax.vim'
 
+" Linting
+Plug 'w0rp/ale'
+
 " vim-markdown and it's dependency - tabular
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'godlygeek/tabular', {'for': 'markdown'}
@@ -452,6 +458,44 @@ let g:used_javascript_libs = 'react,d3,underscore,chai,jasmine'
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••••• Linting •••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+" Dictionary of active linting tools
+let g:ale_linters = {
+\   'JavaScript': ['eslint', 'flow'],
+\   'SCSS': 'all',
+\   'CSS': 'all',
+\   'JSON': 'all',
+\   'Markdown': 'all'
+\}
+
+" Alays keep the sign gutter open at all times
+let g:ale_sign_column_always = 1
+
+" Custom Ale signs symbols
+let g:ale_sign_error = '•>'
+let g:ale_sign_warning = '•≈'
+" let g:ale_sign_warning = '•≈'
+
+" Custom Alle signs colors
+highlight ALEErrorSign guibg=firebrick guifg=wheat
+highlight ALEWarningSign guibg=gold guifg=black
+
+" Custom statusline symbols
+let g:ale_statusline_format = ['🔥 %d', '⚡️ %d', '🍀 OK']
+
+let g:ale_echo_msg_error_str = '🔥'
+let g:ale_echo_msg_warning_str = '⚡️'
+let g:ale_echo_msg_format = '%severity% %linter%: %s'
+
+" Ale navigation between linting asserts
+nmap <silent> ]a <Plug>(ale_next_wrap)
+nmap <silent> [a <Plug>(ale_previous_wrap)
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
 " ••••••••••••••••••••••••••••••••••••••• NERDTree ••••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
@@ -467,8 +511,8 @@ augroup vimenter
 augroup END
 
 " custom arrows
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeDirArrowExpandable = '⇨'
+let g:NERDTreeDirArrowCollapsible = '⇩'
 
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
 
@@ -569,3 +613,4 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " 11. set backupdir=~/.vimbackup
 " 12. set directory=~/.vimbackup
 " 13. set undodir=~/.vimbackup
+" 14. investigate how to 'nnoremap' plugin mappings instad of 'namp'

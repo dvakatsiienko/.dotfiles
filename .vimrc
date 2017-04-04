@@ -66,9 +66,7 @@ set t_Co=256                         " Enable 256-color mode.
 
 set ruler                            " Show the line and column number of the cursor position
 set number
-set relativenumber
 set numberwidth=2
-set cursorline
 set list listchars=tab:»·,trail:·,nbsp:·
 set nojoinspaces
 
@@ -105,6 +103,11 @@ set statusline+=\ L:
 set statusline+=%-4l               " Current line
 set statusline+=\ T:
 set statusline+=%-4L               " Total lines
+
+" Healing Vim performance (these options are terribly slow)
+
+set nocursorline
+set norelativenumber
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 03. Layout                                                                                      "
@@ -511,8 +514,8 @@ augroup vimenter
 augroup END
 
 " custom arrows
-let g:NERDTreeDirArrowExpandable = '⇨'
-let g:NERDTreeDirArrowCollapsible = '⇩'
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
 
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
 
@@ -554,6 +557,10 @@ let g:gitgutter_sign_column_always = 1
 
 " Change modified and deleted line symbol
 let g:gitgutter_sign_modified_removed = '~-'
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '~'
+let g:gitgutter_sign_removed = '-'
+let g:gitgutter_sign_removed_first_line = '·'
 
 " Navigation between hungs within a single buffer
 nmap ]h <Plug>GitGutterNextHunk

@@ -413,6 +413,7 @@ Plug 'airblade/vim-gitgutter'
 " Editing and formatting
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'tpope/vim-surround'
+Plug 'jiangmiao/auto-pairs'
 
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
@@ -529,7 +530,22 @@ let g:NERDTreeWinSize = 35
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
-" ••••••••••••••••••••••••••••••••••••••• Markdown ••••••••••••••••••••••••••••••••••••••••••••••••
+" ••••••••••••••••••••••••••••••••••••••• Autopairs •••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+" Fast wrap
+let g:AutoPairsShortcutFastWrap = '<localleader>fw'
+
+" Toggle autopairs
+let g:AutoPairsShortcutToggle = '<localleader>ta'
+
+" Jump to nex
+let g:AutoPairsShortcutJump = '<localleader>n'
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+"•••••••••••••••••••••••••••••••••••••••• Markdown ••••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
 let g:vim_markdown_folding_disabled = 1
@@ -608,7 +624,7 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " inoremap <C-U> <C-G>u<C-U>
 
 " "TODO"
-" 1. solve vim-surround 'd' and 'c' cursor issue in MacVim
+" 1. solve vim-surround 'd' and 'c' cursor issue in MacVim; after surround added autopairs
 " 3. Multiline insert and EDIT
 " 4. Multiline identation
 " 5. Improve Comment hotkey in order to uncomment automatically
@@ -622,4 +638,4 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " 11. set backupdir=~/.vimbackup
 " 12. set directory=~/.vimbackup
 " 13. set undodir=~/.vimbackup
-" 14. investigate how to 'nnoremap' plugin mappings instad of 'namp'
+" 14. investigate how to 'nnoremap' plugin mappings instad of 'nmap'

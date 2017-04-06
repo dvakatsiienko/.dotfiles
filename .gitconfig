@@ -35,5 +35,5 @@
     rh2          = reset HEAD^^ --hard
 
 [core]
-    excludesfile = /Users/mike/.gitignore_global
+    excludesfile = ~/.gitignore_global
     editor       = vim

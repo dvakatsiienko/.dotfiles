@@ -104,7 +104,7 @@ set statusline+=%-4l               " Current line
 set statusline+=\ T:
 set statusline+=%-4L               " Total lines
 
-" Healing Vim performance (these options are terribly slow)
+" Shut down performance killers
 
 set nocursorline
 set norelativenumber

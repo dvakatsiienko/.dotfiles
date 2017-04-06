@@ -36,3 +36,4 @@
 
 [core]
     excludesfile = /Users/mike/.gitignore_global
+    editor       = vim

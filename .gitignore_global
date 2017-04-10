@@ -3,6 +3,7 @@
 *.un~
 tags
 .idea
+*.log
 NERD_Tree_0
 NERD_Tree_1
 NERD_Tree_2

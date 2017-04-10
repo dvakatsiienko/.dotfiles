@@ -126,8 +126,7 @@ set shiftround
 set expandtab
 
 set nowrap                           " No wrap lines
-set wrapmargin=100                   " Line length
-set textwidth=100
+set textwidth=100                    " The line length used in hard line wrapping
 set colorcolumn=100                  " Code margin indicator + color
 highlight ColorColumn ctermbg=magenta
 
@@ -190,6 +189,22 @@ if has ('autocmd')
         autocmd FileType javascript nnoremap cll yiwoconsole.log('λ', )<Esc>P
     augroup END
 
+    " ordering fix
+    augroup filetype_md
+        autocmd!
+        autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
+        autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+        autocmd FileType markdown   setlocal textwidth=100
+        autocmd FileType markdown   setlocal colorcolumn=100
+        autocmd FileType markdown   setlocal formatoptions=t  " Automatically inserts lbr while typing
+        autocmd FileType markdown   setlocal formatoptions+=a " Adding `live-mode` enhancement
+        autocmd FileType markdown   setlocal formatoptions+=l " ?
+        autocmd FileType markdown   setlocal formatoptions+=q " ?
+        autocmd FileType markdown   setlocal formatoptions+=n " ?
+        autocmd FileType markdown   setlocal formatoptions+=r " ?
+        autocmd FileType markdown   setlocal conceallevel=2
+        autocmd FileType markdown   setlocal spell spelllang=en_us
+    augroup END
 
     augroup filetype_py
         autocmd!
@@ -197,17 +212,6 @@ if has ('autocmd')
         autocmd FileType python     iabbrev  <buffer> iff if:<left>
     augroup END
 
-    augroup filetype_md
-        autocmd!
-        autocmd FileType markdown   onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rk0vg_"<cr>
-        autocmd FileType markdown   onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
-        autocmd FileType markdown   setlocal textwidth=100
-        autocmd FileType markdown   setlocal colorcolumn=100
-        autocmd FileType markdown   setlocal formatoptions-=l
-        autocmd FileType markdown   setlocal formatoptions+=t
-        autocmd FileType markdown   setlocal conceallevel=2
-        autocmd FileType markdown   setlocal spell spelllang=en_us
-    augroup END
 
 endif
 
@@ -244,8 +248,16 @@ nnoremap  <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap  <leader>sv :source $MYVIMRC<cr>
 
 inoremap jk <Esc>
+
+" `g` prefix is made in order to navigate on every visual line in soft-wrap mode
 nnoremap j gj
 nnoremap k gk
+nnoremap $ g$
+nnoremap ^ g^
+vnoremap j gj
+vnoremap k gk
+vnoremap $ g$
+vnoremap ^ g^
 
 " Uppercase a word
 inoremap <c-u> <Esc>viwU<Esc>
@@ -399,8 +411,8 @@ Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'godlygeek/tabular', {'for': 'markdown'}
 
 " Color schemes
-Plug 'morhetz/gruvbox'
-" Plug 'tomasr/molokai'
+" Plug 'morhetz/gruvbox'
+Plug 'tomasr/molokai'
 " Plug 'sjl/badwolf'
 " Plug 'nanotech/jellybeans.vim'
 " Plug 'altercation/vim-colors-solarized'
@@ -433,7 +445,7 @@ nnoremap <leader>pc :PlugClean<CR>
 " ••••••••••••••••••••••••••••••••••••••• Colorschemes ••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
-colorscheme gruvbox
+colorscheme molokai
 set background=dark
 
 " Gruvbox
@@ -545,7 +557,8 @@ let g:AutoPairsShortcutJump = '<localleader>n'
 " Disable <C-h> mapping to delete brackets, quotes in pair
 let g:AutoPairsMapCh = 0
 
-let g:AutoPairs['<']='>'
+" This one seem to be now working
+" let g:AutoPairs['<']='>'
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -644,3 +657,5 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 " 12. set directory=~/.vimbackup
 " 13. set undodir=~/.vimbackup
 " 14. investigate how to 'nnoremap' plugin mappings instad of 'nmap'
+" 15. great text formatter - `par` http://vimcasts.org/episodes/formatting-text-with-par/ 
+

@@ -412,8 +412,8 @@ Plug 'godlygeek/tabular', {'for': 'markdown'}
 
 " Color schemes
 " Plug 'morhetz/gruvbox'
-Plug 'tomasr/molokai'
-" Plug 'sjl/badwolf'
+" Plug 'tomasr/molokai'
+Plug 'sjl/badwolf'
 " Plug 'nanotech/jellybeans.vim'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'chriskempson/base16-vim'
@@ -445,7 +445,7 @@ nnoremap <leader>pc :PlugClean<CR>
 " ••••••••••••••••••••••••••••••••••••••• Colorschemes ••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
-colorscheme molokai
+colorscheme badwolf
 set background=dark
 
 " Gruvbox
@@ -643,6 +643,7 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 
 " "TODO"
 " 1. solve vim-surround 'd' and 'c' cursor issue in MacVim; after surround added autopairs
+" 2. investigate jk missclick (probably only in js files)
 " 3. Multiline insert and EDIT
 " 4. Multiline identation
 " 5. Improve Comment hotkey in order to uncomment automatically

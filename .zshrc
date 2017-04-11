@@ -87,3 +87,5 @@ alias kk="kill -9"
 alias ctags="`brew --prefix`/bin/ctags"
 
 PATH=/opt/local/bin:$PATH
+
+export PATH="$HOME/.yarn/bin:$PATH"

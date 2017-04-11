@@ -411,9 +411,15 @@ Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'godlygeek/tabular', {'for': 'markdown'}
 
 " Color schemes
+<<<<<<< Updated upstream
 " Plug 'morhetz/gruvbox'
 " Plug 'tomasr/molokai'
 Plug 'sjl/badwolf'
+=======
+Plug 'morhetz/gruvbox'
+Plug 'tomasr/molokai'
+" Plug 'sjl/badwolf'
+>>>>>>> Stashed changes
 " Plug 'nanotech/jellybeans.vim'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'chriskempson/base16-vim'
@@ -445,7 +451,11 @@ nnoremap <leader>pc :PlugClean<CR>
 " ••••••••••••••••••••••••••••••••••••••• Colorschemes ••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
+<<<<<<< Updated upstream
 colorscheme badwolf
+=======
+colorscheme gruvbox
+>>>>>>> Stashed changes
 set background=dark
 
 " Gruvbox

@@ -411,15 +411,9 @@ Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'godlygeek/tabular', {'for': 'markdown'}
 
 " Color schemes
-<<<<<<< Updated upstream
-" Plug 'morhetz/gruvbox'
-" Plug 'tomasr/molokai'
-Plug 'sjl/badwolf'
-=======
 Plug 'morhetz/gruvbox'
 Plug 'tomasr/molokai'
 " Plug 'sjl/badwolf'
->>>>>>> Stashed changes
 " Plug 'nanotech/jellybeans.vim'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'chriskempson/base16-vim'
@@ -432,6 +426,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
+
+" Autocomplete
+Plug 'maralla/completor.vim'
 
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
@@ -451,11 +448,7 @@ nnoremap <leader>pc :PlugClean<CR>
 " ••••••••••••••••••••••••••••••••••••••• Colorschemes ••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
-<<<<<<< Updated upstream
-colorscheme badwolf
-=======
 colorscheme gruvbox
->>>>>>> Stashed changes
 set background=dark
 
 " Gruvbox

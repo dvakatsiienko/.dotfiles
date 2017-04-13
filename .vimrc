@@ -230,7 +230,7 @@ endif
 set gdefault                                  " Applies substitutions globally on lines
 
 " Disable ESC, and arrow keys in all modes
-inoremap  <Esc>    <nop>
+" inoremap  <Esc>    <nop>
 inoremap  <up>     <nop>
 inoremap  <right>  <nop>
 inoremap  <down>   <nop>
@@ -247,7 +247,7 @@ inoremap  <left>   <nop>
 nnoremap  <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap  <leader>sv :source $MYVIMRC<cr>
 
-inoremap jk <Esc>
+" inoremap jk <Esc>
 
 " `g` prefix is made in order to navigate on every visual line in soft-wrap mode
 nnoremap j gj
@@ -428,7 +428,7 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 
 " Autocomplete
-Plug 'maralla/completor.vim'
+Plug 'maralla/completor.vim', {'do': 'cd pythonx/completers/javascript && npm install'}
 
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
@@ -618,6 +618,28 @@ omap ih <Plug>GitGutterTextObjectInnerPending
 omap ah <Plug>GitGutterTextObjectOuterPending
 xmap ih <Plug>GitGutterTextObjectInnerVisual
 xmap ah <Plug>GitGutterTextObjectOuterVisual
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• Completor ••••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+" Use Tab to select completion 
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" TODO enter does't work for some reason
+inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+
+" Minimum characters to trigger completions
+let g:completor_min_chars = 1
+
+let g:completor_completion_delay = 0
+
+" Use Tab to trigger completion (disable auto trigger)
+" let g:completor_auto_trigger = 0
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>"
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

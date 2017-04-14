@@ -413,10 +413,10 @@ Plug 'godlygeek/tabular', {'for': 'markdown'}
 " Color schemes
 Plug 'morhetz/gruvbox'
 Plug 'tomasr/molokai'
-" Plug 'sjl/badwolf'
-" Plug 'nanotech/jellybeans.vim'
-" Plug 'altercation/vim-colors-solarized'
-" Plug 'chriskempson/base16-vim'
+Plug 'sjl/badwolf'
+Plug 'nanotech/jellybeans.vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -429,6 +429,10 @@ Plug 'jiangmiao/auto-pairs'
 
 " Autocomplete
 Plug 'maralla/completor.vim', {'do': 'cd pythonx/completers/javascript && npm install'}
+
+" Searching
+Plug 'mhinz/vim-grepper'
+Plug 'ctrlpvim/ctrlp.vim'
 
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
@@ -640,6 +644,28 @@ let g:completor_completion_delay = 0
 " Use Tab to trigger completion (disable auto trigger)
 " let g:completor_auto_trigger = 0
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>"
+
+"∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+"--------------------------------------------------------------------------------------------------
+" ••••••••••••••••••••••••••••••••••••••• Grepper •••••••••••••••••••••••••••••••••••••••••••••••••
+"--------------------------------------------------------------------------------------------------
+
+" mapping for Grepper
+nnoremap <leader>g :Grepper<cr>
+
+" ability to cycle through avaialbe greppers using corresponding mapping
+let g:grepper = {
+    \'next_tool': '<leader>g',
+    \'tools':     ['ag', 'git']
+\}
+
+" for normal and visual modes
+nmap gs  <plug>(GrepperOperator)
+xmap gs  <plug>(GrepperOperator)
+
+" Open selected item from quickfix in a vsplit
+autocmd! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter><C-w>L
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 

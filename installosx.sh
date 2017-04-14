@@ -44,7 +44,7 @@ sudo mkdir -p /opt/local/bin
 cd ~
 git clone https://github.com/vim/vim.git
 cd vim
-./configure --prefix=/opt/local
+./configure --prefix=/opt/local --with-features=huge --enable-pythoninterp
 make
 sudo make install
 

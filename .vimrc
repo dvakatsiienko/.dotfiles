@@ -539,6 +539,8 @@ augroup END
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 
+let NERDTreeIgnore = ['\.DS_Store$', '\.swp$',  '\.un\~$']
+
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
 
 let NERDTreeShowBookmarks = 1
@@ -626,7 +628,7 @@ xmap ah <Plug>GitGutterTextObjectOuterVisual
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 "--------------------------------------------------------------------------------------------------
-" ••••••••••••••••••••••••••••••••••••••• Completor ••••••••••••••••••••••••••••••••••••••••••••••••
+" ••••••••••••••••••••••••••••••••••••••• Completor •••••••••••••••••••••••••••••••••••••••••••••••
 "--------------------------------------------------------------------------------------------------
 
 " Use Tab to select completion 
@@ -657,10 +659,17 @@ nnoremap <leader>g :Grepper<cr>
 " ability to cycle through avaialbe greppers using corresponding mapping
 let g:grepper = {
     \'next_tool': '<leader>g',
-    \'tools':     ['ag', 'git']
+    \'tools':     ['ag', 'git', 'grep']
 \}
 
 " For normal and visual modes
+" Set of options
+" Option to exectue search only in a current buffer
+let g:grepper.buffer = 1
+let g:grepper.highlight = 1
+let g:grepper.simple_prompt = 1
+
+" for normal and visual modes
 nmap gs  <plug>(GrepperOperator)
 xmap gs  <plug>(GrepperOperator)
 

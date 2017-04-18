@@ -27,6 +27,7 @@ set history=200                       " Remember more commands and search histor
 set undolevels=100                    " Use many levels of undo
 set wildmenu                          " Command-line completion operates in an enhanced mode
 set wildmode=list:longest             " Completion mode that is used for wildchar character
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set visualbell                        " Use visual bell instead of beeping
 set undofile                          " Gives the ability to undo file even after closing it
 set shell=/bin/zsh
@@ -187,6 +188,7 @@ if has ('autocmd')
 
         autocmd FileType javascript inoremap cll console.log('λ', );<Esc>==f)i
         autocmd FileType javascript nnoremap cll yiwoconsole.log('λ', )<Esc>P
+        autocmd FileType javascript set formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none
     augroup END
 
     " ordering fix
@@ -262,9 +264,6 @@ vnoremap ^ g^
 " Uppercase a word
 inoremap <c-u> <Esc>viwU<Esc>
 nnoremap <c-u> viwU
-
-" Start vim search in 'very magic mode' - makes regexp search to work in natural way
-nnoremap / /\v
 
 " Adds period to visual mode
 vnoremap . :norm.<CR>
@@ -433,6 +432,7 @@ Plug 'maralla/completor.vim', {'do': 'cd pythonx/completers/javascript && npm in
 " Searching
 Plug 'mhinz/vim-grepper'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'haya14busa/incsearch.vim'
 
 " devicons should be loaded after all other dependent plugins
 Plug 'ryanoasis/vim-devicons'
@@ -660,9 +660,18 @@ let g:grepper = {
     \'tools':     ['ag', 'git']
 \}
 
-" for normal and visual modes
+" For normal and visual modes
 nmap gs  <plug>(GrepperOperator)
 xmap gs  <plug>(GrepperOperator)
+
+" Highlight searches
+let g:grepper.highlight = 1
+
+" Only show the tool name in the prompt, without any of its arguments.
+let g:grepper.simple_prompt = 1
+
+" Open a new window and show matches with surrounding context
+let g:grepper.side = 0
 
 " Open selected item from quickfix in a vsplit
 autocmd! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter><C-w>L
@@ -675,6 +684,7 @@ autocmd! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter><C-w>L
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -686,6 +696,27 @@ let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
 "∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+" GREPPER
+nnoremap <leader>p gggqG<C-o><C-o>
+
+" INCSEARCH
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+set hlsearch
+" Turns 'hlsearch' off automatically after searching-related motions
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
+
+" Enables improved 'very magic' mode
+let g:incsearch#magic = '\v'
 
 " Ctags:
 " Create a 'tags' file (may need to install ctags first)

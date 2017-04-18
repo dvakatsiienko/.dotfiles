@@ -51,6 +51,9 @@ sudo make install
 echo 'Fixing Node permissions'
 sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
 
+echo 'Installing prettier formatter globally'
+npm i -g prettier
+
 echo 'Installing Vim Plug'
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 

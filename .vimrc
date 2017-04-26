@@ -752,6 +752,7 @@ let g:incsearch#magic = '\v'
 " 8. word and symbol count in MD files
 " 9. also wrap WORD in qutes, and add possibility un unwrap
 " 10. investigate and setup CTAGS
+" Fix grepper in markdown
 " 
 " Investigate these below - for storing helper files in more ordered manner
 " 11. set backupdir=~/.vimbackup

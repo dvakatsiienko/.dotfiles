@@ -22,9 +22,11 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 echo 'Fixing Homebrew permissions'
 sudo chown -R "$USER":admin /usr/local
 
+echo 'Installing Yarn'
+curl -o- -L https://yarnpkg.com/install.sh | bash
+
 echo 'Installing classic brew formulas'
 brew install node
-brew install yarn
 brew install the_silver_searcher
 brew install hub
 brew install ctags
@@ -35,11 +37,10 @@ brew cask install google-drive
 brew cask install skyfonts
 brew cask install postman
 brew cask install skype
-brew cask install atom
-brew cask install webstorm
 brew cask install alfred
+brew cask install sip
 
-echo 'Installing vim from binaries'
+echo 'Installing Vim from binaries'
 sudo mkdir -p /opt/local/bin
 cd ~
 git clone https://github.com/vim/vim.git
@@ -48,11 +49,8 @@ cd vim
 make
 sudo make install
 
-echo 'Fixing Node permissions'
+echo 'Fixing npm permissions'
 sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
-
-echo 'Installing prettier formatter globally'
-npm i -g prettier
 
 echo 'Installing Vim Plug'
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

@@ -1,6 +1,6 @@
 [user]
     name         = d.vakatsiienko
-    email        = imagnum.satellite@gmail.com
+    email        = d.vakatsiienko@lectrum.io
 
 [alias]
     q            = ! git commit -a -m \"quick fix\" && git push

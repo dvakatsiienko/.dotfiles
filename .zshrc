@@ -3,8 +3,7 @@ export ZSH=/Users/mike/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-# norm - theme what i am looking for
+ZSH_THEME="norm"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -85,7 +84,21 @@ alias vv="vim"
 alias k="lsof -i tcp:3000"
 alias kk="kill -9"
 alias ctags="`brew --prefix`/bin/ctags"
+alias yr='yarn run'
+
+alias rb="git cherry -v dev | wc -l | sed 's/ //g' |  { IFS= read -r tail; git rebase -i  HEAD~$tail; }"
+
 
 PATH=/opt/local/bin:$PATH
 
 export PATH="$HOME/.yarn/bin:$PATH"
+
+# for remote in $(git remote); do git remote rm $remote; done
+# for branch in $(git branch -a | grep -v master); do git branch -D $branch; done
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+source "/Users/mike/.oh-my-zsh/custom/themes/spaceship.zsh-theme"

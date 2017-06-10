@@ -1,7 +1,7 @@
 module.exports = {
   config: {
     fontSize: 14,
-    fontFamily: 'Roboto Mono Medium Nerd Font Complete, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    fontFamily: 'FiraCode, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
     cursorColor: 'rgba(248,28,229,0.8)',

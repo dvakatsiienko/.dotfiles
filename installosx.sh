@@ -25,11 +25,13 @@ sudo chown -R "$USER":admin /usr/local
 echo 'Installing Yarn'
 curl -o- -L https://yarnpkg.com/install.sh | bash
 
+echo 'Changing Yarn global target dir'
+yarn config set prefix /usr/local/
+
 echo 'Installing classic brew formulas'
 brew install node
 brew install the_silver_searcher
 brew install hub
-brew install ctags
 
 echo 'Installing set of cask formulas'
 brew cask install google-chrome

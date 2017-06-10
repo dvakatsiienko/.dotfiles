@@ -1,5 +1,6 @@
 # Pre-requisite - system ssh agentsetup  with keys
 
+# (clone dotiles first)
 echo "Installing .dotfiles"
 sh ~/.dotfiles/install.sh
 

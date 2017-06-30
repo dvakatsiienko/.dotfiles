@@ -85,3 +85,6 @@ export NVM_DIR="$HOME/.nvm"
 
 
 source "/Users/mike/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+
+
+source "/Users/mike/.oh-my-zsh/custom/themes/spaceship.zsh-theme"

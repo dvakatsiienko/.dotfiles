@@ -33,12 +33,14 @@ echo 'Installing classic brew formulas'
 brew install node
 brew install the_silver_searcher
 brew install hub
+brew install httpie
 
 echo 'Installing set of cask formulas'
 brew cask install google-chrome
 brew cask install google-drive
 brew cask install skyfonts
 brew cask install postman
+brew cask install hyper
 brew cask install skype
 brew cask install alfred
 brew cask install sip
@@ -81,4 +83,7 @@ if [ $SHELL != '/bin/zsh' ]; then
 else
     echo 'Shell is already switched to zsh'
 fi
+
+echo "Installing Spaceship zsh theme"
+npm install -g spaceship-zsh-theme
 

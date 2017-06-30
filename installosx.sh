@@ -36,6 +36,7 @@ brew install hub
 brew install httpie
 
 echo 'Installing set of cask formulas'
+brew cask install atom
 brew cask install google-chrome
 brew cask install google-drive
 brew cask install skyfonts

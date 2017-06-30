@@ -63,8 +63,16 @@ alias vv="vim"
 alias k="lsof -i tcp:3000"
 alias kk="kill -9"
 alias ctags="`brew --prefix`/bin/ctags"
+alias y='yarn'
+alias ya='yarn add'
+alias yad='yarn add --dev'
+alias yre='yarn remove'
 alias yr='yarn run'
+alias yo='yarn outdated'
+alias yu='yarn upgrade'
+alias yui='yarn upgrade-interactive'
 alias rb="git cherry -v dev | wc -l | sed 's/ //g' |  { IFS= read -r tail; git rebase -i  HEAD~$tail; }"
+alias t="git cherry -v dev | wc -l | sed 's/ //g'"
 
 PATH=/opt/local/bin:$PATH
 

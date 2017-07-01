@@ -1,6 +1,6 @@
 .dotfiles ~/.dotfiles
 .vim ~/.vim
-notebook ~/notebook
 
+notebook ~/notebook
 5min-UI ~/5min-UI
 seekwa.web ~/seekwa.web

@@ -1,9 +1,5 @@
 # Pre-requisite - system ssh agentsetup  with keys
 
-# (clone dotiles first)
-echo "Installing .dotfiles"
-sh ~/.dotfiles/install.sh
-
 echo 'Setting up a blazingly fast keyboard repeat rate'
 defaults write NSGlobalDomain KeyRepeat -int 1
 
@@ -26,12 +22,6 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 echo 'Fixing Homebrew permissions'
 sudo chown -R "$USER":admin /usr/local
 
-echo 'Installing Yarn'
-curl -o- -L https://yarnpkg.com/install.sh | bash
-
-echo 'Changing Yarn global target dir'
-yarn config set prefix /usr/local/
-
 echo 'Installing classic brew formulas'
 brew install node
 brew install the_silver_searcher
@@ -49,10 +39,11 @@ brew cask install iterm2
 brew cask install skype
 brew cask install alfred
 brew cask install sip
-brew cask install cloud
+brew cask install cloudapp
 brew cask install appcleaner
 brew cask install battle-net
 brew cask install steam
+brew cask install vlc
 
 echo 'Installing Vim from binaries'
 sudo mkdir -p /opt/local/bin
@@ -90,6 +81,20 @@ else
     echo 'Shell is already switched to zsh'
 fi
 
+echo 'Installing Yarn'
+curl -o- -L https://yarnpkg.com/install.sh | bash
+
+echo 'Changing Yarn global target dir'
+yarn config set prefix /usr/local/
+
+echo "Installing .dotfiles"
+sh ~/.dotfiles/install.sh
+
 echo "Installing Spaceship zsh theme"
 npm install -g spaceship-zsh-theme
+
+echo "Activating terminal themes"
+open ~/.dotfiles/themes/gruvbox-dark.terminal
+open ~/.dotfiles/themes/gruvbox-light.terminal
+open ~/.dotfiles/themes/Treehouse.terminal
 

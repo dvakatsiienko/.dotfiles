@@ -37,6 +37,7 @@ brew install node
 brew install the_silver_searcher
 brew install hub
 brew install httpie
+brew install macvim
 
 echo 'Installing set of cask formulas'
 brew cask install atom

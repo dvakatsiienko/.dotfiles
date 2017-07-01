@@ -85,3 +85,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 source "/Users/mike/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+
+# Homebrew requires /usr/local/bin occurs before /usr/bin in PATH
+export PATH="/usr/local/bin:$PATH"

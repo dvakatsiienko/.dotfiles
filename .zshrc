@@ -3,6 +3,7 @@ export ZSH=/Users/mike/.oh-my-zsh
 ZSH_THEME="spaceship"
 SPACESHIP_PROMPT_SYMBOL="λ"
 SPACESHIP_PROMPT_SEPARATE_LINE="false"
+SPACESHIP_PROMPT_DEFAULT_PREFIX=""
 SPACESHIP_DIR_PREFIX="=> "
 SPACESHIP_DIR_COLOR="blue"
 SPACESHIP_GIT_PREFIX="=>"
@@ -82,9 +83,5 @@ PATH=/opt/local/bin:$PATH
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-source "/Users/mike/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
-
 
 source "/Users/mike/.oh-my-zsh/custom/themes/spaceship.zsh-theme"

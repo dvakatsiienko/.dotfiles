@@ -10,6 +10,9 @@ defaults write NSGlobalDomain KeyRepeat -int 1
 echo 'Setting up a shorter delay until key repeat'
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
+echo 'Turn off annoying FaceTime ringer on Mac'
+sudo defaults write ~/Library/Containers/com.apple.tonelibraryd/Data/Library/Preferences/com.apple.ToneLibrary.plist ringtone "system:"
+
 # Revert to default settings with:
 # defaults delete NSGlobalDomain KeyRepeat
 # defaults delete NSGlobalDomain InitialKeyRepeat
@@ -39,12 +42,16 @@ echo 'Installing set of cask formulas'
 brew cask install atom
 brew cask install google-chrome
 brew cask install google-drive
-brew cask install skyfonts
 brew cask install postman
 brew cask install hyper
+brew cask install iterm2
 brew cask install skype
 brew cask install alfred
 brew cask install sip
+brew cask install cloud
+brew cask install appcleaner
+brew cask install battle-net
+brew cask install steam
 
 echo 'Installing Vim from binaries'
 sudo mkdir -p /opt/local/bin
@@ -66,9 +73,6 @@ git clone git@github.com:powerline/fonts.git ~/fonts && sh ~/fonts/install.sh &&
 
 echo 'Installing Nerd Fonts'
 git clone git@github.com:ryanoasis/nerd-fonts.git ~/nerd-fonts && cd ~/nerd-fonts && ./install.sh && cd ~ && rm -rf ~/nerd-fonts
-
-echo 'Turn off annoying FaceTime ringer on Mac'
-sudo defaults write ~/Library/Containers/com.apple.tonelibraryd/Data/Library/Preferences/com.apple.ToneLibrary.plist ringtone "system:"
 
 echo 'Deleting old bash meta info'
 rm ~/.bash_history

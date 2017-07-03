@@ -24,6 +24,7 @@ sudo chown -R "$USER":admin /usr/local
 
 echo 'Installing classic brew formulas'
 brew install node
+brew install yarn
 brew install the_silver_searcher
 brew install hub
 brew install httpie
@@ -54,6 +55,9 @@ cd vim
 make
 sudo make install
 
+echo 'Changing Yarn global target dir'
+yarn config set prefix /usr/local/
+
 echo 'Fixing npm permissions'
 sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
 
@@ -80,12 +84,6 @@ if [ $SHELL != '/bin/zsh' ]; then
 else
     echo 'Shell is already switched to zsh'
 fi
-
-echo 'Installing Yarn'
-curl -o- -L https://yarnpkg.com/install.sh | bash
-
-echo 'Changing Yarn global target dir'
-yarn config set prefix /usr/local/
 
 echo "Installing .dotfiles"
 sh ~/.dotfiles/install.sh

@@ -59,11 +59,36 @@ export EDITOR='vim'
 
 # Tuning
 
+# General
 alias v="open -a macvim"
 alias vv="vim"
+
+# System
 alias k="lsof -i tcp:3000"
 alias kk="kill -9"
-alias ctags="`brew --prefix`/bin/ctags"
+
+# Git
+alias gs="git status -s"
+alias ga="git add ."
+alias gc="git commit -m"
+alias gca="git commit -a -m"
+alias gch="git checkout"
+alias gchb="git checkout -b"
+alias gp="git push"
+alias gpf="git push --force"
+alias gpu="git push --set-upstream origin"
+alias gpl="git pull"
+alias gcl="git clone"
+alias gbd="git branch -d"
+alias gba="git branch -a"
+alias gbD="git branch -D"
+alias gsl="git stash list"
+alias gss="git stash save"
+alias gsp="git stash pop"
+alias gcv="git cherry -v dev | wc -l"
+alias grb="git rebase -i"
+
+# Yarn
 alias y='yarn'
 alias ya='yarn add'
 alias yad='yarn add --dev'
@@ -72,8 +97,6 @@ alias yr='yarn run'
 alias yo='yarn outdated'
 alias yu='yarn upgrade'
 alias yui='yarn upgrade-interactive'
-alias rb="git cherry -v dev | wc -l | sed 's/ //g' |  { IFS= read -r tail; git rebase -i  HEAD~$tail; }"
-alias t="git cherry -v dev | wc -l | sed 's/ //g'"
 
 PATH=/opt/local/bin:$PATH
 

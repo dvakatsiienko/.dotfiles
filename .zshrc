@@ -88,10 +88,11 @@ alias gsl="git stash list"
 alias gss="git stash save"
 alias gsp="git stash pop"
 alias gcv="git cherry -v dev | wc -l"
-alias grb="git rebase -i"
-alias grbd="git rebase dev"
+alias grb="git rebase"
+alias grbi="git rebase -i"
 alias grba="git rebase --abort"
 alias grbc="git rebase --continue"
+alias grbd="git rebase dev"
 
 # Yarn
 alias y='yarn'

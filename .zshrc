@@ -93,6 +93,7 @@ alias grbi="git rebase -i"
 alias grba="git rebase --abort"
 alias grbc="git rebase --continue"
 alias grbd="git rebase dev"
+alias grh="git reset --hard"
 
 # Yarn
 alias y='yarn'

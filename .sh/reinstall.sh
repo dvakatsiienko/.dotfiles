@@ -8,4 +8,4 @@ if [ -f package-lock.json ]
     else echo "There is no package-lock.json!"
 fi
 
-rm -rf node_modules && yarn && rm -rf node_modules && npm i && yr check
+rm -rf node_modules && yarn && rm -rf node_modules && npm i && yarn run check

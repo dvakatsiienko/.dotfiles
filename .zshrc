@@ -70,6 +70,7 @@ alias k="lsof -i tcp:3000"
 alias kk="kill -9"
 
 # Git
+alias gq="ga && gc 'quick update' && gp"
 alias gs="git status -s"
 alias ga="git add ."
 alias gc="git commit -m"

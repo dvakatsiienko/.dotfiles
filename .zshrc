@@ -62,6 +62,8 @@ export EDITOR='vim'
 # General
 alias v="open -a macvim"
 alias vv="vim"
+# alias reinstall="rm -rf node_modules && if [-f yarn.lock] then rm yarn.lock package-lock.json && y && rm -rf node_modules && npm i"
+alias reinstall="sh ~/.sh/reinstall.sh"
 
 # System
 alias k="lsof -i tcp:3000"
@@ -87,7 +89,9 @@ alias gss="git stash save"
 alias gsp="git stash pop"
 alias gcv="git cherry -v dev | wc -l"
 alias grb="git rebase -i"
-
+alias grbd="git rebase dev"
+alias grba="git rebase --abort"
+alias grbc="git rebase --continue"
 
 # Yarn
 alias y='yarn'

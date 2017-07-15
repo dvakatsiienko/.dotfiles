@@ -47,9 +47,12 @@ SPACESHIP_PROMPT_ORDER=(
 
 # Plugins
 
-plugins=(git)
+plugins=(git, zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
+
+# Syntax highlighting
+ZSH_HIGHLIGHT_STYLES[path]='fg=yellow'
 
 # Global configs
 

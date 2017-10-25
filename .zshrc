@@ -10,6 +10,7 @@ SPACESHIP_GIT_PREFIX="=>"
 SPACESHIP_GIT_SYMBOL="  "
 SPACESHIP_GIT_BRANCH_COLOR="blue"
 SPACESHIP_NODE_SHOW="false"
+SPACESHIP_DOCKER_SHOW='false'
 SPACESHIP_PROMPT_ORDER=(
     char          # Prompt character
     dir           # Current directory section
@@ -78,6 +79,7 @@ alias gs="git status -s"
 alias ga="git add ."
 alias gc="git commit -m"
 alias gca="git commit -a -m"
+alias gcam="git commit --amend"
 alias gch="git checkout"
 alias gchb="git checkout -b"
 alias gp="git push"
@@ -101,6 +103,7 @@ alias grh="git reset --hard"
 
 # Yarn
 alias y='yarn'
+alias ys='yarn start'
 alias ya='yarn add'
 alias yad='yarn add --dev'
 alias yre='yarn remove'

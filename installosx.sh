@@ -50,6 +50,7 @@ brew cask install battle-net
 open /usr/local/Caskroom/battle-net/latest/Battle.net-Setup.app
 brew cask install steam
 brew cask install vlc
+brew cask install transmission
 
 echo 'Installing Vim from binaries'
 sudo mkdir -p /opt/local/bin

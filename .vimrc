@@ -49,7 +49,7 @@ set viminfo='10,\"100,:20,%,n~/.viminfo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("gui_macvim")
-    set fullscreen                   " MacVim automatic full screen mode on file open
+    " set fullscreen                   " MacVim automatic full screen mode on file open
     set fuopt+=maxhorz               " Grow to maximum screen size on entering full screen mode
 endif
 
@@ -419,7 +419,7 @@ Plug 'chriskempson/base16-vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 
 " Editing and formatting
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}

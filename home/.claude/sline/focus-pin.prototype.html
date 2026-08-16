@@ -42,6 +42,18 @@ pre{margin:0;background:#1d2021;border:1px solid var(--line);border-radius:5px;
 .touch{color:var(--dim)}
 .nothing{color:#665c54;font-style:italic}
 .log{max-height:230px;overflow-y:auto;font-size:13px}
+.st{font-size:12px}
+.st-todo{color:#928374}.st-prog{color:var(--yellow)}.st-rev{color:var(--blue)}
+.st-done{color:var(--green)}.st-cancel{color:var(--red)}
+.stale-status{opacity:.45}
+.wrong{background:#3c2f2f;border:1px solid var(--red);border-radius:5px;padding:9px 12px;
+  margin-top:10px;font-size:13px;color:var(--fg)}
+.ok{color:var(--dim);font-size:13px;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{text-align:left;padding:5px 8px;border-bottom:1px solid #32302f}
+th{color:var(--dim);font-weight:normal;font-size:12px}
+select{font:inherit;font-size:13px;background:#1d2021;color:var(--fg);
+  border:1px solid var(--line);border-radius:4px;padding:3px 6px}
 .log div{padding:3px 0;border-bottom:1px solid #32302f}
 .fired{color:var(--green)}
 .inert{color:var(--dim)}
@@ -60,10 +72,13 @@ kbd{background:#32302f;border:1px solid var(--line);border-radius:3px;padding:1p
 <div>
   <h1>focus pin state machine</h1>
   <p class="q" style="margin-top:6px">
-    Question this answers: <strong>does the pin / touch model behave the way it reads on paper?</strong>
+    <strong>Question 1 — does the pin / touch model behave the way it reads on paper?</strong>
     Two halves that never meet in one place — <code>hooks/focus.sh</code> decides what gets
     <em>stored</em>, <code>sline/focus.go</code> decides what gets <em>shown</em> — are both ported
-    here so you can drive them together.
+    here so you can drive them together.<br>
+    <strong>Question 2 (DOT-81) — is a stale Linear status tolerable in the line?</strong>
+    Status is fetched by the hook and cached, never fetched at render. So the line can be wrong.
+    The panel below lets you move a ticket in "Linear" behind sline's back and watch what happens.
   </p>
 </div>
 
@@ -95,6 +110,31 @@ kbd{background:#32302f;border:1px solid var(--line);border-radius:3px;padding:1p
     <div class="sline" id="render"></div>
     <h2 style="margin-top:16px">focus file — ~/.claude/focus/&lt;session&gt;.json</h2>
     <pre id="state"></pre>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>DOT-81 — status cache vs Linear</h2>
+  <p class="q">
+    The hook fetches on <strong>every prompt submit</strong> (event-driven — that is when ids change)
+    and refreshes anything older than the TTL. Nothing is ever fetched at render.
+    Move a ticket in the left column to simulate someone dragging it in the Linear UI —
+    sline will not know until the next prompt.
+  </p>
+  <div class="cols">
+    <div>
+      <h2>Linear — the truth</h2>
+      <table id="truth"></table>
+      <div class="row">
+        <button class="warn" onclick="ageCache(20)">age the cache 20 min</button>
+        <button onclick="refetch()">force a refetch</button>
+      </div>
+    </div>
+    <div>
+      <h2>sline's cache — what it renders from</h2>
+      <table id="cache"></table>
+      <div id="divergence"></div>
+    </div>
   </div>
 </div>
 
@@ -139,9 +179,14 @@ function applyPrompt(text) {
     const arg = m[2].toUpperCase();
 
     if (verb === 'clam') {
+      // Promote: an id can never sit in both slots, so pinning takes it OUT of touch.
       state.pin = arg;
       state.pin_at = now;
+      state.touch = (state.touch || []).filter(x => x !== arg);
+      if (state.touch.length === 0) { delete state.touch; delete state.touch_at; }
     } else if (verb === 'touch') {
+      // Demote: touching the pinned id gives up the pin rather than shadowing it.
+      if (state.pin === arg) { delete state.pin; delete state.pin_at; }
       // newest first, deduped, capped at 3
       state.touch = [arg, ...(state.touch || []).filter(x => x !== arg)].slice(0, 3);
       state.touch_at = now;
@@ -153,7 +198,58 @@ function applyPrompt(text) {
     log.unshift({ line, verb: verb === 'ticketfly' ? 'ticket fly' : verb, arg, fired: true });
   }
   log = log.slice(0, 40);
+  fetchStatuses(false); // the hook's own fetch — event-driven, backgrounded in reality
   draw();
+}
+
+// ---------------------------------------------------------------------------
+// DOT-81 — the status cache. Nothing here exists yet; this is the proposal.
+//
+// Fetch is event-driven: the hook already fires on UserPromptSubmit, which is
+// the exact moment the id set changes. One query covers every id at once, so
+// this is one 420ms call, never four — and it never runs at render.
+// ---------------------------------------------------------------------------
+const STATUSES = ['Todo', 'In Progress', 'In Review', 'Done', 'Canceled'];
+const ST_CLASS = { 'Todo': 'st-todo', 'In Progress': 'st-prog', 'In Review': 'st-rev',
+                   'Done': 'st-done', 'Canceled': 'st-cancel' };
+const CACHE_TTL = 15 * 60;   // refresh anything older than this
+const CACHE_STALE = 30 * 60; // past this, stop asserting it — dim the status
+
+// What Linear actually holds. Editable, to stand in for someone dragging a card.
+let truth = { 'DOT-23': 'Done', 'DOT-9': 'In Progress', 'DOT-1': 'Todo',
+              'DOT-2': 'In Review', 'DOT-3': 'Todo', 'DOT-4': 'Todo',
+              'DOT-5': 'In Progress', 'DOT-7': 'Todo', 'DOT-81': 'Todo' };
+let cache = {}; // id -> { status, fetched_at }
+
+function idsInFocus() {
+  return [state.pin, ...(state.touch || [])].filter(Boolean)
+    .filter((v, i, a) => a.indexOf(v) === i);
+}
+
+// One call, all ids. Called by the hook — on id change, and on TTL expiry.
+function fetchStatuses(force) {
+  for (const id of idsInFocus()) {
+    const held = cache[id];
+    if (!force && held && (now - held.fetched_at) < CACHE_TTL) continue;
+    cache[id] = { status: truth[id] || 'Todo', fetched_at: now };
+  }
+  for (const id of Object.keys(cache)) {           // drop what left focus
+    if (!idsInFocus().includes(id)) delete cache[id];
+  }
+}
+
+function statusOf(id) {
+  const held = cache[id];
+  if (!held) return null;
+  return { status: held.status, stale: (now - held.fetched_at) > CACHE_STALE,
+           age: now - held.fetched_at };
+}
+
+function statusHTML(id) {
+  const st = statusOf(id);
+  if (!st) return '';
+  return ` <span class="st ${ST_CLASS[st.status]}${st.stale ? ' stale-status' : ''}">`
+       + `${st.status}${st.stale ? ' ?' : ''}</span>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -169,13 +265,13 @@ function renderSegment() {
   const parts = [];
   if (pin) {
     const stale = state.pin_at > 0 && (now - state.pin_at) > PIN_STALE_AFTER;
-    parts.push(`<span class="pin${stale ? ' stale' : ''}">🪄 ${pin}</span>`);
+    parts.push(`<span class="pin${stale ? ' stale' : ''}">🪄 ${pin}</span>` + statusHTML(pin));
   }
   let first = pin === '';
   for (const id of touch) {
-    if (!id || id === pin) continue;          // a touch equal to the pin earns no space
-    if (first) { parts.push(`<span class="touch">${id}</span>`); first = false; continue; }
-    parts.push(`<span class="touch">· ${id}</span>`);
+    if (!id || id === pin) continue;          // belt-and-braces: the hook now moves, never dupes
+    if (first) { parts.push(`<span class="touch">${id}</span>` + statusHTML(id)); first = false; continue; }
+    parts.push(`<span class="touch">· ${id}</span>` + statusHTML(id));
   }
   return parts.join(' ');
 }
@@ -195,6 +291,8 @@ function draw() {
   document.getElementById('state').textContent =
     Object.keys(shown).length ? JSON.stringify(shown, null, 2) : '{}';
 
+  drawStatusTables();
+
   document.getElementById('log').innerHTML = log.map(e =>
     e.fired
       ? `<div class="fired">✓ ${esc(e.line)} &nbsp;→&nbsp; ${e.verb}${e.arg ? ' ' + e.arg : ''}</div>`
@@ -203,6 +301,43 @@ function draw() {
 }
 
 const esc = s => s.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+
+function drawStatusTables() {
+  const ids = idsInFocus();
+  document.getElementById('truth').innerHTML =
+    '<tr><th>ticket</th><th>state in Linear</th></tr>' +
+    (ids.length ? ids.map(id => `<tr><td>${id}</td><td>
+      <select onchange="setTruth('${id}', this.value)">
+        ${STATUSES.map(s => `<option ${truth[id] === s ? 'selected' : ''}>${s}</option>`).join('')}
+      </select></td></tr>`).join('')
+     : '<tr><td colspan="2" class="nothing">nothing in focus</td></tr>');
+
+  document.getElementById('cache').innerHTML =
+    '<tr><th>ticket</th><th>cached</th><th>age</th></tr>' +
+    (ids.length ? ids.map(id => {
+      const st = statusOf(id);
+      if (!st) return `<tr><td>${id}</td><td class="nothing">not fetched</td><td>—</td></tr>`;
+      return `<tr><td>${id}</td><td class="${ST_CLASS[st.status]}${st.stale ? ' stale-status' : ''}">`
+           + `${st.status}${st.stale ? ' ?' : ''}</td><td>${(st.age / 60).toFixed(0)}m</td></tr>`;
+    }).join('') : '<tr><td colspan="3" class="nothing">nothing in focus</td></tr>');
+
+  const wrong = ids.filter(id => cache[id] && cache[id].status !== truth[id]);
+  const box = document.getElementById('divergence');
+  if (!wrong.length) {
+    box.className = 'ok';
+    box.textContent = ids.length ? '✓ the line agrees with Linear' : '';
+    return;
+  }
+  box.className = 'wrong';
+  box.innerHTML = '⚠️ <strong>the line is lying right now</strong><br>' + wrong.map(id =>
+    `${id}: sline says <strong>${cache[id].status}</strong>, Linear says <strong>${truth[id]}</strong>`
+      + (statusOf(id).stale ? ' — but it is dimmed, so at least it admits it' : ' — and it looks confident')
+  ).join('<br>');
+}
+
+function setTruth(id, v) { truth[id] = v; draw(); }
+function ageCache(mins) { now += mins * 60; draw(); }
+function refetch() { fetchStatuses(true); draw(); }
 
 function submit() { applyPrompt(document.getElementById('prompt').value); }
 function setPrompt(t) { document.getElementById('prompt').value = t; submit(); }
@@ -218,13 +353,26 @@ document.getElementById('prompt').addEventListener('keydown', e => {
 // ---------------------------------------------------------------------------
 const WALKS = [
   {
-    name: 'pin vs touch overlap',
-    blurb: 'The pin is sticky and touches are noise. What happens when the same id is both?',
+    name: 'promote and demote',
+    blurb: 'An id lives in exactly one slot. Pinning a touched ticket MOVES it; touching the pinned one gives the pin up. It used to dupe — invisible on screen, but it ate one of the three touch slots.',
     steps: [
       ['tickets fly', 'clean slate'],
-      ['clam DOT-23', 'pin set, rendered 🪄'],
-      ['touch DOT-23', 'stored in touch — but NOT rendered, because it equals the pin'],
-      ['touch DOT-9', 'now a touch disagrees with the pin, so it earns space'],
+      ['touch DOT-9\ntouch DOT-1\ntouch DOT-2', 'three touches, all slots full'],
+      ['clam DOT-9', 'promoted — DOT-9 leaves touch, so DOT-1 and DOT-2 both keep their slot'],
+      ['touch DOT-3', 'the freed slot is real: three touches again, none of them the pin'],
+      ['touch DOT-9', 'demoted — touching the pinned id drops the pin and moves it to front'],
+    ],
+  },
+  {
+    name: 'stale status (DOT-81)',
+    blurb: 'Status is fetched by the hook and cached, never fetched at render. So the line can be confidently wrong. Watch the divergence box above.',
+    steps: [
+      ['tickets fly', 'clean slate'],
+      ['clam DOT-9', 'fetched on submit — In Progress, fresh'],
+      ['@truth', 'move DOT-9 to Done in the Linear panel yourself, then look at the line'],
+      ['@age20', '20m — past the TTL but not yet stale; the line still asserts the old status'],
+      ['clam DOT-9', 'any prompt re-fetches past the TTL, and the line catches up'],
+      ['@age40', '40m with no prompt — now dimmed with a ?, admitting it does not know'],
     ],
   },
   {
@@ -280,7 +428,7 @@ function drawTabs() {
   document.getElementById('walk').innerHTML =
     `<p class="q">${w.blurb}</p>` + w.steps.map(([s, expect], i) =>
       `<div class="step">
-         <button onclick="step(${active},${i})">${s.startsWith('@age') ? '⏱ +' + s.slice(4) + 'h' : 'run'}</button>
+         <button onclick="step(${active},${i})">${s === '@truth' ? '↑ do it above' : s.startsWith('@age') ? '⏱ +' + s.slice(4) + (w.name.includes('status') ? 'm' : 'h') : 'run'}</button>
          <code>${esc(s).replace(/\n/g, '<br>')}</code>
          <div class="expect">↳ ${expect}</div>
        </div>`).join('');
@@ -288,7 +436,12 @@ function drawTabs() {
 function pick(i) { active = i; drawTabs(); }
 function step(w, i) {
   const s = WALKS[w].steps[i][0];
-  if (s.startsWith('@age')) return age(parseInt(s.slice(4), 10));
+  if (s === '@truth') return;
+  if (s.startsWith('@age')) {
+    const n = parseInt(s.slice(4), 10);
+    // The status walkthrough thinks in minutes; the pin one in hours.
+    return WALKS[w].name.includes('status') ? ageCache(n) : age(n);
+  }
   document.getElementById('prompt').value = s;
   applyPrompt(s);
 }

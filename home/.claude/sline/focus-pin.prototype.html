@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>focus pin — PROTOTYPE</title>
+<style>
+:root{
+  --bg:#1d2021; --panel:#282828; --line:#3c3836; --dim:#928374;
+  --fg:#d4be98; --fg3:#bdae93;
+  --yellow:#d8a657; --green:#a9b665; --red:#ea6962; --blue:#7daea3;
+  --orange:#e78a4e; --purple:#d3869b;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--fg);
+  font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:20px}
+h1{margin:0;font-size:20px;color:var(--green)}
+h2{margin:0 0 10px;font-size:14px;color:var(--yellow);text-transform:uppercase;letter-spacing:.1em}
+.banner{background:#3c2f2f;border:1px solid var(--red);color:var(--fg);
+  padding:10px 14px;border-radius:6px;font-size:13px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}}
+button{font:inherit;background:#32302f;color:var(--fg);border:1px solid var(--line);
+  border-radius:5px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--dim)}
+button.go{background:var(--green);color:#1d2021;border-color:var(--green);font-weight:bold}
+button.warn{border-color:var(--orange);color:var(--orange)}
+button.tab{border-radius:5px 5px 0 0;border-bottom-color:transparent}
+button.tab.on{background:var(--panel);color:var(--yellow);border-color:var(--line);border-bottom-color:var(--panel)}
+textarea{width:100%;min-height:78px;background:#1d2021;color:var(--fg);border:1px solid var(--line);
+  border-radius:5px;padding:9px;font:inherit;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+pre{margin:0;background:#1d2021;border:1px solid var(--line);border-radius:5px;
+  padding:12px;overflow-x:auto;font-size:13px}
+.sline{background:#1d2021;border:1px solid var(--line);border-radius:5px;padding:14px;
+  font-size:15px;min-height:52px;display:flex;align-items:center}
+.sep{color:#7c6f64}
+.pin{color:var(--blue)}
+.pin.stale{color:var(--dim)}
+.touch{color:var(--dim)}
+.nothing{color:#665c54;font-style:italic}
+.log{max-height:230px;overflow-y:auto;font-size:13px}
+.log div{padding:3px 0;border-bottom:1px solid #32302f}
+.fired{color:var(--green)}
+.inert{color:var(--dim)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:14px}
+.step{padding:9px 0;border-bottom:1px solid #32302f}
+.step:last-child{border:0}
+.step code{background:#32302f;padding:2px 6px;border-radius:3px;color:var(--orange)}
+.expect{color:var(--dim);font-size:13px}
+.q{color:var(--fg3);font-size:13px;margin:0 0 12px}
+kbd{background:#32302f;border:1px solid var(--line);border-radius:3px;padding:1px 5px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div>
+  <h1>focus pin state machine</h1>
+  <p class="q" style="margin-top:6px">
+    Question this answers: <strong>does the pin / touch model behave the way it reads on paper?</strong>
+    Two halves that never meet in one place — <code>hooks/focus.sh</code> decides what gets
+    <em>stored</em>, <code>sline/focus.go</code> decides what gets <em>shown</em> — are both ported
+    here so you can drive them together.
+  </p>
+</div>
+
+<div class="banner">
+  ⚠️ <strong>PROTOTYPE — throwaway.</strong> A hand port of the real logic, not the real code.
+  Nothing here is imported by sline or the hook. If the two ever disagree, the shell and the Go win.
+</div>
+
+<div class="cols">
+  <div class="panel">
+    <h2>type a prompt</h2>
+    <p class="q">Exactly what you would type at the CC prompt. Multi-line works — the hook reads line by line.</p>
+    <textarea id="prompt" spellcheck="false">clam DOT-23</textarea>
+    <div class="row">
+      <button class="go" onclick="submit()">submit prompt ⏎</button>
+      <button onclick="setPrompt('clam DOT-23')">clam</button>
+      <button onclick="setPrompt('touch DOT-9')">touch</button>
+      <button onclick="setPrompt('ticket fly DOT-9')">ticket fly</button>
+      <button onclick="setPrompt('tickets fly')">tickets fly</button>
+    </div>
+    <div class="row">
+      <button class="warn" onclick="age(9)">age the pin 9h (go stale)</button>
+      <button class="warn" onclick="reset()">wipe state</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>what sline renders</h2>
+    <div class="sline" id="render"></div>
+    <h2 style="margin-top:16px">focus file — ~/.claude/focus/&lt;session&gt;.json</h2>
+    <pre id="state"></pre>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>guided walkthroughs</h2>
+  <p class="q">Each one is a case that is genuinely hard to hold in your head. Click a step to apply it.</p>
+  <div class="tabs" id="tabs"></div>
+  <div id="walk"></div>
+</div>
+
+<div class="panel">
+  <h2>line log — what fired, what stayed inert</h2>
+  <div class="log" id="log"></div>
+</div>
+
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// PORT OF hooks/focus.sh — what gets stored.
+// ---------------------------------------------------------------------------
+const TICKETS_FLY = /^\s*tickets\s+fly\s*$/i;
+const VERB = /^\s*(clam|touch|ticket\s+fly)\s+((?:DOT|BYT)-\d+)\s*$/i;
+
+let state = {};
+let now = Math.floor(Date.now() / 1000);
+let log = [];
+
+function applyPrompt(text) {
+  for (const line of text.split('\n')) {
+    if (TICKETS_FLY.test(line)) {
+      state = {};
+      log.unshift({ line, verb: 'tickets fly', fired: true });
+      continue;
+    }
+    const m = line.match(VERB);
+    if (!m) {
+      log.unshift({ line, fired: false });
+      continue;
+    }
+    const verb = m[1].toLowerCase().replace(/\s+/g, '');
+    const arg = m[2].toUpperCase();
+
+    if (verb === 'clam') {
+      state.pin = arg;
+      state.pin_at = now;
+    } else if (verb === 'touch') {
+      // newest first, deduped, capped at 3
+      state.touch = [arg, ...(state.touch || []).filter(x => x !== arg)].slice(0, 3);
+      state.touch_at = now;
+    } else if (verb === 'ticketfly') {
+      if (state.pin === arg) { delete state.pin; delete state.pin_at; }
+      state.touch = (state.touch || []).filter(x => x !== arg);
+      if (state.touch.length === 0) { delete state.touch; delete state.touch_at; }
+    }
+    log.unshift({ line, verb: verb === 'ticketfly' ? 'ticket fly' : verb, arg, fired: true });
+  }
+  log = log.slice(0, 40);
+  draw();
+}
+
+// ---------------------------------------------------------------------------
+// PORT OF sline/focus.go — what gets shown.
+// ---------------------------------------------------------------------------
+const PIN_STALE_AFTER = 8 * 3600;
+
+function renderSegment() {
+  const pin = state.pin || '';
+  const touch = state.touch || [];
+  if (!pin && touch.length === 0) return null; // segment omitted entirely
+
+  const parts = [];
+  if (pin) {
+    const stale = state.pin_at > 0 && (now - state.pin_at) > PIN_STALE_AFTER;
+    parts.push(`<span class="pin${stale ? ' stale' : ''}">🪄 ${pin}</span>`);
+  }
+  let first = pin === '';
+  for (const id of touch) {
+    if (!id || id === pin) continue;          // a touch equal to the pin earns no space
+    if (first) { parts.push(`<span class="touch">${id}</span>`); first = false; continue; }
+    parts.push(`<span class="touch">· ${id}</span>`);
+  }
+  return parts.join(' ');
+}
+
+// ---------------------------------------------------------------------------
+// Surface everything after every action.
+// ---------------------------------------------------------------------------
+function draw() {
+  const seg = renderSegment();
+  document.getElementById('render').innerHTML = seg === null
+    ? '<span class="nothing">— no segment at all (nothing pinned, nothing touched) —</span>'
+    : `<span class="sep">•</span>&nbsp; ${seg}`;
+
+  const shown = { ...state };
+  if (shown.pin_at) shown.pin_at = `${shown.pin_at}  (age ${((now - shown.pin_at) / 3600).toFixed(1)}h)`;
+  if (shown.touch_at) shown.touch_at = `${shown.touch_at}`;
+  document.getElementById('state').textContent =
+    Object.keys(shown).length ? JSON.stringify(shown, null, 2) : '{}';
+
+  document.getElementById('log').innerHTML = log.map(e =>
+    e.fired
+      ? `<div class="fired">✓ ${esc(e.line)} &nbsp;→&nbsp; ${e.verb}${e.arg ? ' ' + e.arg : ''}</div>`
+      : `<div class="inert">· ${esc(e.line)} &nbsp;→&nbsp; inert</div>`
+  ).join('') || '<div class="inert">nothing yet</div>';
+}
+
+const esc = s => s.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+
+function submit() { applyPrompt(document.getElementById('prompt').value); }
+function setPrompt(t) { document.getElementById('prompt').value = t; submit(); }
+function age(hours) { now += hours * 3600; draw(); }
+function reset() { state = {}; log = []; now = Math.floor(Date.now() / 1000); draw(); }
+
+document.getElementById('prompt').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); }
+});
+
+// ---------------------------------------------------------------------------
+// Walkthroughs — the cases that are hard to reason about on paper.
+// ---------------------------------------------------------------------------
+const WALKS = [
+  {
+    name: 'pin vs touch overlap',
+    blurb: 'The pin is sticky and touches are noise. What happens when the same id is both?',
+    steps: [
+      ['tickets fly', 'clean slate'],
+      ['clam DOT-23', 'pin set, rendered 🪄'],
+      ['touch DOT-23', 'stored in touch — but NOT rendered, because it equals the pin'],
+      ['touch DOT-9', 'now a touch disagrees with the pin, so it earns space'],
+    ],
+  },
+  {
+    name: 'touch cap and dedup',
+    blurb: 'Three slots, newest first. Re-touching an id moves it rather than duplicating it.',
+    steps: [
+      ['tickets fly', 'clean slate'],
+      ['touch DOT-1\ntouch DOT-2\ntouch DOT-3', 'three at once — newest ends up leftmost'],
+      ['touch DOT-4', 'DOT-1 falls off the end'],
+      ['touch DOT-3', 'already held — it moves to front, nothing is dropped'],
+    ],
+  },
+  {
+    name: 'inert prose',
+    blurb: 'Two rules stop ordinary sentences firing: the keyword must START the line, and an argument is mandatory.',
+    steps: [
+      ['tickets fly', 'clean slate'],
+      ["don't touch DOT-9", 'not line-initial → inert'],
+      ['clam', 'no argument → inert'],
+      ["let's fly through this", 'no argument, wrong shape → inert'],
+      ['touch DOT-9', 'the real thing → fires'],
+      ['TOUCH dot-9', 'verb case-insensitive, id upper-cased on the way in'],
+    ],
+  },
+  {
+    name: 'fly semantics',
+    blurb: 'One id can sit in both slots. `ticket fly` has to clear it from wherever it lives.',
+    steps: [
+      ['tickets fly', 'clean slate'],
+      ['clam DOT-5\ntouch DOT-5\ntouch DOT-7', 'DOT-5 is pin AND touch'],
+      ['ticket fly DOT-5', 'gone from both — DOT-7 survives and now leads, with no · prefix'],
+      ['ticket fly DOT-7', 'last touch removed → the touch key is deleted, not left as []'],
+    ],
+  },
+  {
+    name: 'stale pin',
+    blurb: 'A pin nobody refreshed must LOOK forgotten rather than quietly assert a ticket you left hours ago.',
+    steps: [
+      ['tickets fly', 'clean slate'],
+      ['clam DOT-23', 'fresh — rendered in ticket blue'],
+      ['@age8', 'push the clock 8h forward — still fresh, the threshold is strictly greater'],
+      ['@age1', 'one more hour — now dimmed to grey'],
+      ['clam DOT-23', 're-pinning the same id refreshes pin_at and the colour comes back'],
+    ],
+  },
+];
+
+let active = 0;
+function drawTabs() {
+  document.getElementById('tabs').innerHTML = WALKS.map((w, i) =>
+    `<button class="tab ${i === active ? 'on' : ''}" onclick="pick(${i})">${w.name}</button>`).join('');
+  const w = WALKS[active];
+  document.getElementById('walk').innerHTML =
+    `<p class="q">${w.blurb}</p>` + w.steps.map(([s, expect], i) =>
+      `<div class="step">
+         <button onclick="step(${active},${i})">${s.startsWith('@age') ? '⏱ +' + s.slice(4) + 'h' : 'run'}</button>
+         <code>${esc(s).replace(/\n/g, '<br>')}</code>
+         <div class="expect">↳ ${expect}</div>
+       </div>`).join('');
+}
+function pick(i) { active = i; drawTabs(); }
+function step(w, i) {
+  const s = WALKS[w].steps[i][0];
+  if (s.startsWith('@age')) return age(parseInt(s.slice(4), 10));
+  document.getElementById('prompt').value = s;
+  applyPrompt(s);
+}
+
+drawTabs();
+applyPrompt('clam DOT-23');
+</script>
+</body>
+</html>

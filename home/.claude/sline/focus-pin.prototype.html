@@ -135,9 +135,12 @@ kbd{background:#32302f;border:1px solid var(--line);border-radius:3px;padding:1p
       <h2>Linear — the truth</h2>
       <table id="truth"></table>
       <div class="row">
-        <button class="warn" onclick="ageCache(20)">age the cache 20 min</button>
+        <button class="warn" onclick="ageCache(20)">let 20 min pass</button>
         <button onclick="refetch()">force a refetch</button>
+        <button id="timerBtn" onclick="toggleTimer()">start background timer</button>
       </div>
+      <h2 style="margin-top:16px">what would actually trigger a fetch</h2>
+      <div id="mech"></div>
     </div>
     <div>
       <h2>sline's cache — what it renders from</h2>
@@ -207,7 +210,7 @@ function applyPrompt(text) {
     log.unshift({ line, verb: verb === 'ticketfly' ? 'ticket fly' : verb, arg, fired: true });
   }
   log = log.slice(0, 40);
-  fetchStatuses(false); // the hook's own fetch — event-driven, backgrounded in reality
+  fetchStatuses(false, 'hook — you typed a prompt');
   draw();
 }
 
@@ -237,7 +240,7 @@ const ST_FORMS = {
   emoji:   { 'Todo': '⚪', 'In Progress': '🟡', 'In Review': '🔵',
              'Done': '🟢', 'Canceled': '🔴' },
 };
-let stMode = 'words';
+let stMode = 'short';
 const CACHE_TTL = 15 * 60;   // refresh anything older than this
 const CACHE_STALE = 30 * 60; // past this, stop asserting it — dim the status
 
@@ -252,8 +255,15 @@ function idsInFocus() {
     .filter((v, i, a) => a.indexOf(v) === i);
 }
 
-// One call, all ids. Called by the hook — on id change, and on TTL expiry.
-function fetchStatuses(force) {
+// Three things can trigger a fetch. NONE of them is the render.
+//   1. the hook, on UserPromptSubmit — free, you already typed
+//   2. a background timer, if enabled — the only source of true freshness
+//   3. an explicit force
+let timerOn = false, timerHandle = null;
+const TIMER_EVERY = 120;   // seconds of simulated time per background tick
+let fetchCount = 0, lastTrigger = '—';
+
+function fetchStatuses(force, trigger) {
   for (const id of idsInFocus()) {
     const held = cache[id];
     if (!force && held && (now - held.fetched_at) < CACHE_TTL) continue;
@@ -262,6 +272,23 @@ function fetchStatuses(force) {
   for (const id of Object.keys(cache)) {           // drop what left focus
     if (!idsInFocus().includes(id)) delete cache[id];
   }
+  if (trigger) { fetchCount++; lastTrigger = trigger; }
+}
+
+// The background option: a launchd agent ticking on a timer. This IS polling —
+// but off the render path, so it costs one request per interval and never makes
+// the line wait. It is the only way the line goes stale-free while you sit idle.
+function toggleTimer() {
+  timerOn = !timerOn;
+  if (timerHandle) { clearInterval(timerHandle); timerHandle = null; }
+  if (timerOn) {
+    timerHandle = setInterval(() => {
+      now += TIMER_EVERY;                 // time passes
+      fetchStatuses(true, 'background timer');
+      draw();
+    }, 2000);                             // every 2 real seconds, for watching
+  }
+  draw();
 }
 
 function statusOf(id) {
@@ -336,6 +363,8 @@ function draw() {
     Object.keys(shown).length ? JSON.stringify(shown, null, 2) : '{}';
 
   drawStatusTables();
+  const tb = document.getElementById('timerBtn');
+  if (tb) tb.textContent = timerOn ? 'stop background timer' : 'start background timer';
 
   document.getElementById('log').innerHTML = log.map(e =>
     e.fired
@@ -365,6 +394,21 @@ function drawStatusTables() {
            + `${st.status}${st.stale ? ' ?' : ''}</td><td>${(st.age / 60).toFixed(0)}m</td></tr>`;
     }).join('') : '<tr><td colspan="3" class="nothing">nothing in focus</td></tr>');
 
+  const oldest = ids.map(id => cache[id]).filter(Boolean)
+    .reduce((a, c) => Math.min(a, c.fetched_at), Infinity);
+  const dueIn = oldest === Infinity ? null : Math.max(0, CACHE_TTL - (now - oldest));
+  document.getElementById('mech').innerHTML = `
+    <table>
+      <tr><th>fetches so far</th><td>${fetchCount}</td></tr>
+      <tr><th>last triggered by</th><td>${lastTrigger}</td></tr>
+      <tr><th>TTL</th><td>${CACHE_TTL / 60}m — a prompt inside this window re-uses the cache and fetches nothing</td></tr>
+      <tr><th>next prompt would fetch?</th><td>${dueIn === null ? 'yes, nothing cached'
+        : dueIn > 0 ? `no — ${Math.ceil(dueIn / 60)}m of TTL left` : 'yes, TTL expired'}</td></tr>
+      <tr><th>background timer</th><td>${timerOn
+        ? `<span class="st-done">running — refetching every ${TIMER_EVERY / 60}m of clock</span>`
+        : '<span class="st-todo">off — nothing updates until you type</span>'}</td></tr>
+    </table>`;
+
   const wrong = ids.filter(id => cache[id] && cache[id].status !== truth[id]);
   const box = document.getElementById('divergence');
   if (!wrong.length) {
@@ -382,7 +426,7 @@ function drawStatusTables() {
 function setTruth(id, v) { truth[id] = v; draw(); }
 function setMode(m) { stMode = m; draw(); }
 function ageCache(mins) { now += mins * 60; draw(); }
-function refetch() { fetchStatuses(true); draw(); }
+function refetch() { fetchStatuses(true, 'forced by hand'); draw(); }
 
 function submit() { applyPrompt(document.getElementById('prompt').value); }
 function setPrompt(t) { document.getElementById('prompt').value = t; submit(); }
